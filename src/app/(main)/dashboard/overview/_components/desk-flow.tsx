@@ -1,6 +1,5 @@
 import { ExternalLink, FileCheck2, PackageCheck, Radar, ScrollText, Upload } from "lucide-react";
 
-import { OptionalIllustration } from "@/app/(main)/dashboard/_components/optional-illustration";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const steps = [
@@ -36,7 +35,7 @@ const steps = [
   },
 ];
 
-/** The desk in one strip: five isometric platforms on one gold path, drawn in the interface itself. */
+/** A compact, accessible workflow with a concrete document at every step. */
 export function DeskFlow() {
   return (
     <Card>
@@ -48,16 +47,10 @@ export function DeskFlow() {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
-        <OptionalIllustration
-          src="/media/process-flow.webp"
-          alt="Isometric diagram of the five steps: a posting, a radar, seven tabs assembled, a sealed pack, a hand placing it into a public building"
-          caption="The five steps as one path"
-          aspect="21/9"
-        />
         <div className="relative">
           <svg
             aria-hidden="true"
-            className="absolute inset-x-0 top-9 hidden h-2 w-full lg:block"
+            className="absolute inset-x-0 top-5 hidden h-px w-full lg:block"
             preserveAspectRatio="none"
             viewBox="0 0 100 2"
           >
@@ -70,34 +63,17 @@ export function DeskFlow() {
               strokeWidth="2"
               vectorEffect="non-scaling-stroke"
             />
-            <line
-              x1="10"
-              y1="1"
-              x2="90"
-              y2="1"
-              stroke="var(--chart-1)"
-              strokeWidth="2"
-              strokeDasharray="6 10"
-              vectorEffect="non-scaling-stroke"
-              className="motion-safe:animate-[dash_1.6s_linear_infinite]"
-            />
           </svg>
           <ol className="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {steps.map((s, i) => {
               const Icon = s.icon;
               return (
-                <li key={s.title} className="flex flex-col items-center gap-3 text-center">
-                  <div className="relative">
-                    <div
-                      aria-hidden="true"
-                      className="absolute -bottom-2 left-1/2 h-4 w-16 -translate-x-1/2 rounded-[50%] bg-primary/25 blur-[2px]"
-                    />
-                    <div className="relative flex size-20 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md [transform:rotateX(18deg)_rotateZ(-6deg)] motion-safe:transition-transform motion-safe:duration-300 hover:[transform:rotateX(0deg)_rotateZ(0deg)_translateY(-4px)]">
-                      <Icon className="size-8" />
-                      <span className="absolute -top-2 -right-2 flex size-6 items-center justify-center rounded-full bg-[var(--chart-1)] font-medium text-[11px] text-[var(--primary)] shadow">
-                        {i + 1}
-                      </span>
-                    </div>
+                <li key={s.title} className="flex flex-col items-start gap-3 bg-card lg:px-2">
+                  <div className="relative flex items-center gap-2 bg-card pr-3">
+                    <span className="flex size-10 items-center justify-center rounded-lg border bg-muted/40">
+                      <Icon className="size-4 text-muted-foreground" />
+                    </span>
+                    <span className="font-mono text-muted-foreground text-xs">0{i + 1}</span>
                   </div>
                   <div>
                     <p className="font-medium text-sm">{s.title}</p>

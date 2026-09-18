@@ -1,4 +1,3 @@
-import { OptionalIllustration } from "@/app/(main)/dashboard/_components/optional-illustration";
 import { ScreenIntro } from "@/app/(main)/dashboard/_components/screen-intro";
 import { mapcAmendments, opportunities } from "@/data/opportunities";
 import { API_IN_BROWSER } from "@/lib/desk-api/flags";
@@ -31,12 +30,6 @@ export default function Page() {
               : "The Run search button replays the last verified result. The Simulate switch adds one invented posting to show the alert flow.",
           },
         ]}
-      />
-      <OptionalIllustration
-        src="/media/watcher.webp"
-        alt="Isometric diagram of a radar sweeping a public notice board, one posting lifting and glowing"
-        caption="What the watcher does every morning"
-        aspect="21/9"
       />
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
         <div className="xl:col-span-8">

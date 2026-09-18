@@ -1,6 +1,5 @@
 import { format } from "date-fns";
 
-import { OptionalIllustration } from "@/app/(main)/dashboard/_components/optional-illustration";
 import { ScreenIntro } from "@/app/(main)/dashboard/_components/screen-intro";
 import { buildObligations, sdpReportSchedule } from "@/data/obligations";
 
@@ -30,12 +29,6 @@ export default function Page() {
         ]}
       />
       <div className="flex flex-col gap-4">
-        <OptionalIllustration
-          src="/media/compliance.webp"
-          alt="Isometric diagram of a quarter calendar linked to a stack of sealed folders"
-          caption="The obligations that recur: quarterly, every three years, per milestone"
-          aspect="21/9"
-        />
         <SdpCalculator
           currentLabel={sdp.current.label}
           currentDue={format(sdp.current.due, "MMMM d, yyyy")}

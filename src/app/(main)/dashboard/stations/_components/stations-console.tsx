@@ -59,9 +59,9 @@ import type {
 const POLL_MS = 3000;
 
 const covers: Record<string, string> = {
-  "ST-LOWELL-01": "/media/site-lowell.webp",
-  "ST-SAMPLE-02": "/media/site-municipal.webp",
-  "ST-SAMPLE-03": "/media/site-park.webp",
+  "ST-LOWELL-01": "/media/site-commercial-v2.webp",
+  "ST-SAMPLE-02": "/media/site-municipal-v2.webp",
+  "ST-SAMPLE-03": "/media/site-park-v2.webp",
 };
 
 const connectorStyle: Record<ConnectorStatus, string> = {
@@ -500,16 +500,16 @@ function StationCard({
         selected && "border-primary ring-1 ring-primary",
       )}
     >
-      <div className="relative -mx-4 -mt-4 mb-1 aspect-[16/7] overflow-hidden">
+      <div className="relative -mx-4 -mt-4 mb-1 aspect-[16/6] overflow-hidden bg-muted">
         <Image
-          src={covers[station.id] ?? "/media/site-municipal.webp"}
-          alt=""
+          src={covers[station.id] ?? "/media/site-municipal-v2.webp"}
+          alt="Illustrative charging-site setting; not a photograph of this station"
           fill
           sizes="(min-width: 1024px) 33vw, 100vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover"
         />
-        <span className="absolute right-2 bottom-2 rounded-sm bg-black/50 px-1.5 py-0.5 text-[10px] text-white uppercase tracking-wider">
-          Illustration
+        <span className="absolute right-2 bottom-2 rounded-sm bg-slate-950/75 px-2 py-1 text-[10px] text-white">
+          Illustrative site
         </span>
       </div>
       <div className="flex items-start justify-between gap-2">
