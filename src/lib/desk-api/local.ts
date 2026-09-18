@@ -1,4 +1,13 @@
-import { type ApiResult, stationCommand, stationOne, stationsList, stationTelemetry, watcherRun } from "./handlers";
+import {
+  type ApiResult,
+  fleetHistory,
+  fleetSummary,
+  stationCommand,
+  stationOne,
+  stationsList,
+  stationTelemetry,
+  watcherRun,
+} from "./handlers";
 
 /**
  * In-browser transport for the desk API. Used only in the static build, where there is no server to
@@ -27,6 +36,12 @@ function route(method: string, url: URL, body: unknown): ApiResult {
 
   if (path === "/api/watcher/run") {
     return method === "POST" ? watcherRun(body) : methodNotAllowed();
+  }
+  if (path === "/api/fleet/summary") {
+    return method === "GET" ? fleetSummary() : methodNotAllowed();
+  }
+  if (path === "/api/fleet/history") {
+    return method === "GET" ? fleetHistory(url.searchParams.get("days")) : methodNotAllowed();
   }
   if (path === "/api/stations") {
     return method === "GET" ? stationsList(url.searchParams.get("clock")) : methodNotAllowed();

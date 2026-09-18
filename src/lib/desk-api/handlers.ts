@@ -1,6 +1,8 @@
 import type { CommandRequest } from "@/app/(main)/dashboard/stations/_components/types";
 import { opportunities, watcherQueries } from "@/data/opportunities";
 import {
+  getFleetHistory,
+  getFleetSummary,
   getSnapshot,
   getTelemetry,
   isDaylightClock,
@@ -55,6 +57,17 @@ export function stationTelemetry(id: string, minutesRaw: string | null): ApiResu
   if (!getSnapshot(id)) return { status: 404, body: { error: `Unknown station ${id}` } };
   const minutes = Math.min(Math.max(Number(minutesRaw ?? 60), 5), 720);
   return { status: 200, body: { stationId: id, minutes, points: getTelemetry(id, minutes) } };
+}
+
+/** GET /api/fleet/summary */
+export function fleetSummary(): ApiResult {
+  return { status: 200, body: getFleetSummary() };
+}
+
+/** GET /api/fleet/history?days=30 */
+export function fleetHistory(daysRaw: string | null): ApiResult {
+  const days = Math.min(Math.max(Math.round(Number(daysRaw ?? 30)) || 30, 7), 90);
+  return { status: 200, body: getFleetHistory(days) };
 }
 
 /** POST /api/stations/:id/commands */

@@ -1,5 +1,7 @@
 export type ConnectorStatus = "Available" | "Preparing" | "Charging" | "Finishing" | "Faulted" | "Unavailable";
 
+export type SiteType = "commercial" | "municipal" | "state-park" | "transit" | "park-and-ride";
+
 export interface Connector {
   id: number;
   type: "CCS1" | "J1772";
@@ -13,6 +15,11 @@ export interface StationSnapshot {
   id: string;
   name: string;
   site: string;
+  town: string;
+  siteType: SiteType;
+  buyerHint: string;
+  lat: number;
+  lng: number;
   provenance: "public" | "sample";
   model: string;
   firmware: string;
@@ -29,6 +36,12 @@ export interface StationSnapshot {
   outputKw: number;
   energyTodayKwh: number;
   sessionsToday: number;
+  tariffUsdPerKwh: number;
+  revenueTodayUsd: number;
+  sessions30d: number;
+  energy30dKwh: number;
+  revenue30dUsd: number;
+  uptime30dPct: number;
   enclosureTempC: number;
   connectors: Connector[];
   faults: string[];
@@ -41,6 +54,52 @@ export interface TelemetryPoint {
   batteryKw: number;
   batterySoc: number;
   gridKw: number;
+}
+
+export interface FleetDay {
+  date: string;
+  sessions: number;
+  energyKwh: number;
+  revenueUsd: number;
+}
+
+export interface FleetStationStats {
+  id: string;
+  name: string;
+  town: string;
+  siteType: SiteType;
+  provenance: "public" | "sample";
+  tariffUsdPerKwh: number;
+  sessionsToday: number;
+  energyTodayKwh: number;
+  revenueTodayUsd: number;
+  sessions30d: number;
+  energy30dKwh: number;
+  revenue30dUsd: number;
+  uptime30dPct: number;
+}
+
+export interface FleetSummary {
+  readAt: string;
+  stations: number;
+  online: number;
+  chargingNow: number;
+  faults: number;
+  outputKw: number;
+  pvKw: number;
+  sessionsToday: number;
+  energyTodayKwh: number;
+  revenueTodayUsd: number;
+  sessions30d: number;
+  energy30dKwh: number;
+  revenue30dUsd: number;
+  uptime30dPct: number;
+  byStation: FleetStationStats[];
+}
+
+export interface FleetHistory {
+  days: number;
+  series: FleetDay[];
 }
 
 export type CommandName =

@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { ScreenIntro } from "@/app/(main)/dashboard/_components/screen-intro";
 import { API_IN_BROWSER } from "@/lib/desk-api/flags";
 
@@ -30,7 +32,9 @@ export default function Page() {
             : []),
         ]}
       />
-      <StationsConsole />
+      <Suspense fallback={null}>
+        <StationsConsole />
+      </Suspense>
     </div>
   );
 }

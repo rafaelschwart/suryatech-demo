@@ -2,7 +2,11 @@ import type {
   CommandRequest,
   CommandResponse,
   Connector,
+  FleetHistory,
+  FleetStationStats,
+  FleetSummary,
   PowerCheckReport,
+  SiteType,
   StationSnapshot,
   TelemetryPoint,
 } from "@/app/(main)/dashboard/stations/_components/types";
@@ -10,26 +14,33 @@ import type {
 /**
  * Station simulator. Stands in for the charge station management system (CSMS) that a real
  * deployment would expose over OCPP 1.6J or 2.0.1. Every number here is generated; the only
- * real fact is the Lowell address, which comes from the public filing. The point of the module
- * is the shape of the integration: what a power check reads, what a remote command returns,
- * and how the dashboard consumes it.
+ * real fact is the Lowell address, which comes from the public filing. The other six sites are
+ * placed on public lots of the kind VEH122 buyers have asked for (municipal, DCR, MBTA, MassDOT),
+ * so the map shows what a deployed fleet across greater Boston would look like. The point of the
+ * module is the shape of the integration: what a power check reads, what a remote command returns,
+ * what a day of sessions is worth, and how the dashboard consumes it.
  */
 
+type LiveField =
+  | "pvKw"
+  | "batterySoc"
+  | "batteryKw"
+  | "gridKw"
+  | "outputKw"
+  | "energyTodayKwh"
+  | "connectors"
+  | "lastHeartbeat"
+  | "online"
+  | "faults"
+  | "enclosureTempC"
+  | "revenueTodayUsd"
+  | "sessions30d"
+  | "energy30dKwh"
+  | "revenue30dUsd"
+  | "uptime30dPct";
+
 interface StationState {
-  base: Omit<
-    StationSnapshot,
-    | "pvKw"
-    | "batterySoc"
-    | "batteryKw"
-    | "gridKw"
-    | "outputKw"
-    | "energyTodayKwh"
-    | "connectors"
-    | "lastHeartbeat"
-    | "online"
-    | "faults"
-    | "enclosureTempC"
-  >;
+  base: Omit<StationSnapshot, LiveField>;
   soc: number;
   availability: "Operative" | "Inoperative";
   connectors: Connector[];
@@ -37,85 +48,250 @@ interface StationState {
   resetAt: number | null;
   offlineUntil: number | null;
   sessionsToday: number;
+  /** Typical weekday sessions, the anchor for the 30-day history. */
+  baseDailySessions: number;
+  uptime30dPct: number;
 }
 
-const stations: Record<string, StationState> = {
-  "ST-LOWELL-01": {
-    base: {
-      id: "ST-LOWELL-01",
+const MODEL = "SuryaTech hybrid solar and battery DC charger";
+
+function station(
+  id: string,
+  base: Omit<
+    StationState["base"],
+    "id" | "model" | "availability" | "sessionsToday" | "pvCapacityKw" | "batteryCapacityKwh"
+  >,
+  live: Omit<StationState, "base">,
+): [string, StationState] {
+  return [
+    id,
+    {
+      base: {
+        id,
+        model: MODEL,
+        availability: "Operative",
+        sessionsToday: 0,
+        pvCapacityKw: 12,
+        batteryCapacityKwh: 120,
+        ...base,
+      },
+      ...live,
+    },
+  ];
+}
+
+const stations: Record<string, StationState> = Object.fromEntries([
+  station(
+    "ST-LOWELL-01",
+    {
       name: "Lowell, 1460 Middlesex Street",
       site: "Mobil fuel site, Lowell MA. Address from the public filing; commissioning status to confirm.",
+      town: "Lowell",
+      siteType: "commercial",
+      buyerHint: "Private site owner",
+      lat: 42.6318,
+      lng: -71.3395,
       provenance: "public",
-      model: "SuryaTech hybrid solar and battery DC charger",
       firmware: "4.0.2",
       ocppVersion: "2.0.1",
-      availability: "Operative",
-      pvCapacityKw: 12,
-      batteryCapacityKwh: 120,
-      sessionsToday: 0,
+      tariffUsdPerKwh: 0.39,
     },
-    soc: 68,
-    availability: "Operative",
-    connectors: [
-      { id: 1, type: "CCS1", maxKw: 60, status: "Charging", outputKw: 0, sessionKwh: 0 },
-      { id: 2, type: "J1772", maxKw: 7.2, status: "Available", outputKw: 0, sessionKwh: null },
-    ],
-    faults: [],
-    resetAt: null,
-    offlineUntil: null,
-    sessionsToday: 7,
-  },
-  "ST-SAMPLE-02": {
-    base: {
-      id: "ST-SAMPLE-02",
-      name: "Sample site A, municipal lot",
+    {
+      soc: 68,
+      availability: "Operative",
+      connectors: [
+        { id: 1, type: "CCS1", maxKw: 60, status: "Charging", outputKw: 0, sessionKwh: 0 },
+        { id: 2, type: "J1772", maxKw: 7.2, status: "Available", outputKw: 0, sessionKwh: null },
+      ],
+      faults: [],
+      resetAt: null,
+      offlineUntil: null,
+      sessionsToday: 7,
+      baseDailySessions: 9,
+      uptime30dPct: 99.2,
+    },
+  ),
+  station(
+    "ST-SAMPLE-02",
+    {
+      name: "Newton, city hall lot",
       site: "Illustrative. A town-hall lot with no three-phase service, the case for a non-grid-tied unit.",
+      town: "Newton",
+      siteType: "municipal",
+      buyerHint: "Municipality",
+      lat: 42.337,
+      lng: -71.2092,
       provenance: "sample",
-      model: "SuryaTech hybrid solar and battery DC charger",
       firmware: "4.0.2",
       ocppVersion: "2.0.1",
-      availability: "Operative",
-      pvCapacityKw: 12,
-      batteryCapacityKwh: 120,
-      sessionsToday: 0,
+      tariffUsdPerKwh: 0.35,
     },
-    soc: 54,
-    availability: "Operative",
-    connectors: [
-      { id: 1, type: "CCS1", maxKw: 60, status: "Available", outputKw: 0, sessionKwh: null },
-      { id: 2, type: "J1772", maxKw: 7.2, status: "Charging", outputKw: 0, sessionKwh: 0 },
-    ],
-    faults: [],
-    resetAt: null,
-    offlineUntil: null,
-    sessionsToday: 4,
-  },
-  "ST-SAMPLE-03": {
-    base: {
-      id: "ST-SAMPLE-03",
-      name: "Sample site B, state park",
-      site: "Illustrative. A remote park lot of the kind DCR requested three times in April 2026.",
+    {
+      soc: 54,
+      availability: "Operative",
+      connectors: [
+        { id: 1, type: "CCS1", maxKw: 60, status: "Available", outputKw: 0, sessionKwh: null },
+        { id: 2, type: "J1772", maxKw: 7.2, status: "Charging", outputKw: 0, sessionKwh: 0 },
+      ],
+      faults: [],
+      resetAt: null,
+      offlineUntil: null,
+      sessionsToday: 4,
+      baseDailySessions: 6,
+      uptime30dPct: 98.7,
+    },
+  ),
+  station(
+    "ST-SAMPLE-03",
+    {
+      name: "Blue Hills Reservation, Milton",
+      site: "Illustrative. A remote DCR park lot of the kind the department requested three times in April 2026.",
+      town: "Milton",
+      siteType: "state-park",
+      buyerHint: "DCR",
+      lat: 42.2178,
+      lng: -71.093,
       provenance: "sample",
-      model: "SuryaTech hybrid solar and battery DC charger",
       firmware: "3.9.7",
       ocppVersion: "1.6J",
-      availability: "Operative",
-      pvCapacityKw: 12,
-      batteryCapacityKwh: 120,
-      sessionsToday: 0,
+      tariffUsdPerKwh: 0.35,
     },
-    soc: 23,
-    availability: "Operative",
-    connectors: [
-      { id: 1, type: "CCS1", maxKw: 60, status: "Faulted", outputKw: 0, sessionKwh: null },
-      { id: 2, type: "J1772", maxKw: 7.2, status: "Available", outputKw: 0, sessionKwh: null },
-    ],
-    faults: ["Connector 1: GroundFailure reported 02:14. Awaiting site visit.", "Battery SoC below 25% reserve."],
-    resetAt: null,
-    offlineUntil: null,
-    sessionsToday: 1,
-  },
-};
+    {
+      soc: 23,
+      availability: "Operative",
+      connectors: [
+        { id: 1, type: "CCS1", maxKw: 60, status: "Faulted", outputKw: 0, sessionKwh: null },
+        { id: 2, type: "J1772", maxKw: 7.2, status: "Available", outputKw: 0, sessionKwh: null },
+      ],
+      faults: ["Connector 1: GroundFailure reported 02:14. Awaiting site visit.", "Battery SoC below 25% reserve."],
+      resetAt: null,
+      offlineUntil: null,
+      sessionsToday: 1,
+      baseDailySessions: 5,
+      uptime30dPct: 94.1,
+    },
+  ),
+  station(
+    "ST-SAMPLE-04",
+    {
+      name: "Alewife, Cambridge (MBTA lot)",
+      site: "Illustrative. A transit park-and-ride garage lot, the kind of site in the MBTA request BD-26-1206.",
+      town: "Cambridge",
+      siteType: "transit",
+      buyerHint: "MBTA",
+      lat: 42.3954,
+      lng: -71.1425,
+      provenance: "sample",
+      firmware: "4.0.2",
+      ocppVersion: "2.0.1",
+      tariffUsdPerKwh: 0.42,
+    },
+    {
+      soc: 81,
+      availability: "Operative",
+      connectors: [
+        { id: 1, type: "CCS1", maxKw: 60, status: "Charging", outputKw: 0, sessionKwh: 0 },
+        { id: 2, type: "J1772", maxKw: 7.2, status: "Charging", outputKw: 0, sessionKwh: 0 },
+      ],
+      faults: [],
+      resetAt: null,
+      offlineUntil: null,
+      sessionsToday: 11,
+      baseDailySessions: 13,
+      uptime30dPct: 99.6,
+    },
+  ),
+  station(
+    "ST-SAMPLE-05",
+    {
+      name: "Braintree park-and-ride (MassDOT)",
+      site: "Illustrative. A highway park-and-ride lot, the site type in the MassDOT request BD-26-1030.",
+      town: "Braintree",
+      siteType: "park-and-ride",
+      buyerHint: "MassDOT",
+      lat: 42.2079,
+      lng: -71.0011,
+      provenance: "sample",
+      firmware: "4.0.2",
+      ocppVersion: "2.0.1",
+      tariffUsdPerKwh: 0.39,
+    },
+    {
+      soc: 61,
+      availability: "Operative",
+      connectors: [
+        { id: 1, type: "CCS1", maxKw: 60, status: "Available", outputKw: 0, sessionKwh: null },
+        { id: 2, type: "J1772", maxKw: 7.2, status: "Available", outputKw: 0, sessionKwh: null },
+      ],
+      faults: [],
+      resetAt: null,
+      offlineUntil: null,
+      sessionsToday: 6,
+      baseDailySessions: 8,
+      uptime30dPct: 99.1,
+    },
+  ),
+  station(
+    "ST-SAMPLE-06",
+    {
+      name: "Assembly Row, Somerville (municipal)",
+      site: "Illustrative. A municipal surface lot beside a transit stop; out of service today for a scheduled panel swap.",
+      town: "Somerville",
+      siteType: "municipal",
+      buyerHint: "Municipality",
+      lat: 42.3926,
+      lng: -71.0776,
+      provenance: "sample",
+      firmware: "4.0.2",
+      ocppVersion: "2.0.1",
+      tariffUsdPerKwh: 0.42,
+    },
+    {
+      soc: 92,
+      availability: "Inoperative",
+      connectors: [
+        { id: 1, type: "CCS1", maxKw: 60, status: "Unavailable", outputKw: 0, sessionKwh: null },
+        { id: 2, type: "J1772", maxKw: 7.2, status: "Unavailable", outputKw: 0, sessionKwh: null },
+      ],
+      faults: [],
+      resetAt: null,
+      offlineUntil: null,
+      sessionsToday: 0,
+      baseDailySessions: 10,
+      uptime30dPct: 91.4,
+    },
+  ),
+  station(
+    "ST-SAMPLE-07",
+    {
+      name: "Lynn Shore Reservation (DCR)",
+      site: "Illustrative. A beachfront DCR lot with seasonal traffic and no nearby three-phase feed.",
+      town: "Lynn",
+      siteType: "state-park",
+      buyerHint: "DCR",
+      lat: 42.4631,
+      lng: -70.9366,
+      provenance: "sample",
+      firmware: "4.0.2",
+      ocppVersion: "2.0.1",
+      tariffUsdPerKwh: 0.35,
+    },
+    {
+      soc: 47,
+      availability: "Operative",
+      connectors: [
+        { id: 1, type: "CCS1", maxKw: 60, status: "Charging", outputKw: 0, sessionKwh: 0 },
+        { id: 2, type: "J1772", maxKw: 7.2, status: "Available", outputKw: 0, sessionKwh: null },
+      ],
+      faults: [],
+      resetAt: null,
+      offlineUntil: null,
+      sessionsToday: 3,
+      baseDailySessions: 5,
+      uptime30dPct: 97.8,
+    },
+  ),
+]);
 
 const sessionStartedAt: Record<string, number> = {};
 
@@ -206,6 +382,46 @@ function advance() {
   }
 }
 
+const DAY_MS = 86_400_000;
+
+function dayNumber(at: Date): number {
+  return Math.floor((at.getTime() - at.getTimezoneOffset() * 60_000) / DAY_MS);
+}
+
+/**
+ * One past day of sessions for one station, deterministic per station and date so the history
+ * does not change between reads. Parks fill on weekends; commuter and municipal lots on weekdays.
+ */
+function dailyStats(s: StationState, day: number): { sessions: number; energyKwh: number; revenueUsd: number } {
+  const seed = stationSeed(s.base.id);
+  const dow = new Date(day * DAY_MS).getUTCDay();
+  const weekend = dow === 0 || dow === 6;
+  const weekendFactor = s.base.siteType === "state-park" ? (weekend ? 1.4 : 0.85) : weekend ? 0.65 : 1.1;
+  const noise = seededNoise(day + seed);
+  const sessions = Math.max(0, Math.round(s.baseDailySessions * weekendFactor * (0.7 + 0.6 * noise)));
+  const energyKwh = Number((sessions * (19 + 9 * seededNoise(day * 3 + seed))).toFixed(1));
+  const revenueUsd = Number((energyKwh * s.base.tariffUsdPerKwh).toFixed(2));
+  return { sessions, energyKwh, revenueUsd };
+}
+
+function energyToday(s: StationState, outputKw: number): number {
+  const seed = stationSeed(s.base.id);
+  return Number((outputKw * 3.1 + s.sessionsToday * 21.4 + seededNoise(seed) * 9).toFixed(1));
+}
+
+function thirtyDay(s: StationState, today: number): { sessions: number; energyKwh: number; revenueUsd: number } {
+  let sessions = 0;
+  let energyKwh = 0;
+  let revenueUsd = 0;
+  for (let d = today - 30; d < today; d++) {
+    const day = dailyStats(s, d);
+    sessions += day.sessions;
+    energyKwh += day.energyKwh;
+    revenueUsd += day.revenueUsd;
+  }
+  return { sessions, energyKwh: Number(energyKwh.toFixed(1)), revenueUsd: Number(revenueUsd.toFixed(2)) };
+}
+
 export function getSnapshot(id: string): StationSnapshot | null {
   const s = stations[id];
   if (!s) return null;
@@ -214,7 +430,8 @@ export function getSnapshot(id: string): StationSnapshot | null {
   const p = computePoint(id, s, now);
   const seed = stationSeed(id);
   const online = !s.offlineUntil;
-  const energyToday = Number((p.outputKw * 3.1 + s.sessionsToday * 21.4 + seededNoise(seed) * 9).toFixed(1));
+  const energy = energyToday(s, p.outputKw);
+  const month = thirtyDay(s, dayNumber(now));
   return {
     ...s.base,
     online,
@@ -227,8 +444,13 @@ export function getSnapshot(id: string): StationSnapshot | null {
     batteryKw: p.batteryKw,
     gridKw: p.gridKw,
     outputKw: p.outputKw,
-    energyTodayKwh: energyToday,
+    energyTodayKwh: energy,
     sessionsToday: s.sessionsToday,
+    revenueTodayUsd: Number((energy * s.base.tariffUsdPerKwh).toFixed(2)),
+    sessions30d: month.sessions,
+    energy30dKwh: month.energyKwh,
+    revenue30dUsd: month.revenueUsd,
+    uptime30dPct: s.uptime30dPct,
     enclosureTempC: Number((31 + p.outputKw * 0.12 + seededNoise(seed + now.getHours()) * 3).toFixed(1)),
     connectors: s.connectors.map((c) => ({ ...c })),
     faults: [...s.faults],
@@ -239,6 +461,79 @@ export function listSnapshots(): StationSnapshot[] {
   return Object.keys(stations)
     .map((id) => getSnapshot(id))
     .filter((s): s is StationSnapshot => s !== null);
+}
+
+/** Fleet totals for the operations screens: what is running, what charged today, what it earned. */
+export function getFleetSummary(): FleetSummary {
+  const snaps = listSnapshots();
+  const sum = (f: (s: StationSnapshot) => number) => snaps.reduce((n, s) => n + f(s), 0);
+  const round1 = (n: number) => Number(n.toFixed(1));
+  const round2 = (n: number) => Number(n.toFixed(2));
+  const byStation: FleetStationStats[] = snaps.map((s) => ({
+    id: s.id,
+    name: s.name,
+    town: s.town,
+    siteType: s.siteType,
+    provenance: s.provenance,
+    tariffUsdPerKwh: s.tariffUsdPerKwh,
+    sessionsToday: s.sessionsToday,
+    energyTodayKwh: s.energyTodayKwh,
+    revenueTodayUsd: s.revenueTodayUsd,
+    sessions30d: s.sessions30d,
+    energy30dKwh: s.energy30dKwh,
+    revenue30dUsd: s.revenue30dUsd,
+    uptime30dPct: s.uptime30dPct,
+  }));
+  return {
+    readAt: new Date().toISOString(),
+    stations: snaps.length,
+    online: snaps.filter((s) => s.online).length,
+    chargingNow: snaps.filter((s) => s.connectors.some((c) => c.status === "Charging")).length,
+    faults: sum((s) => s.faults.length),
+    outputKw: round1(sum((s) => s.outputKw)),
+    pvKw: round1(sum((s) => s.pvKw)),
+    sessionsToday: sum((s) => s.sessionsToday),
+    energyTodayKwh: round1(sum((s) => s.energyTodayKwh)),
+    revenueTodayUsd: round2(sum((s) => s.revenueTodayUsd)),
+    sessions30d: sum((s) => s.sessions30d),
+    energy30dKwh: round1(sum((s) => s.energy30dKwh)),
+    revenue30dUsd: round2(sum((s) => s.revenue30dUsd)),
+    uptime30dPct: snaps.length ? round1(sum((s) => s.uptime30dPct) / snaps.length) : 0,
+    byStation,
+  };
+}
+
+/** Fleet-wide daily sessions, energy and revenue for the last `days` days, today included as live. */
+export function getFleetHistory(days: number): FleetHistory {
+  const now = new Date();
+  const today = dayNumber(now);
+  const series = [];
+  for (let d = today - days + 1; d <= today; d++) {
+    let sessions = 0;
+    let energyKwh = 0;
+    let revenueUsd = 0;
+    for (const s of Object.values(stations)) {
+      if (d === today) {
+        const p = computePoint(s.base.id, s, now);
+        const energy = energyToday(s, p.outputKw);
+        sessions += s.sessionsToday;
+        energyKwh += energy;
+        revenueUsd += energy * s.base.tariffUsdPerKwh;
+      } else {
+        const day = dailyStats(s, d);
+        sessions += day.sessions;
+        energyKwh += day.energyKwh;
+        revenueUsd += day.revenueUsd;
+      }
+    }
+    series.push({
+      date: new Date(d * DAY_MS).toISOString().slice(0, 10),
+      sessions,
+      energyKwh: Number(energyKwh.toFixed(1)),
+      revenueUsd: Number(revenueUsd.toFixed(2)),
+    });
+  }
+  return { days, series };
 }
 
 export function getTelemetry(id: string, minutes: number): TelemetryPoint[] {
@@ -332,11 +627,9 @@ export function runCommand(id: string, req: CommandRequest): CommandResponse | n
       const c = s.connectors.find((x) => x.id === (req.connectorId ?? 1));
       if (!c || c.status === "Faulted" || s.availability === "Inoperative") {
         status = "Rejected";
-        detail = !c
-          ? "Unknown connector."
-          : c.status === "Faulted"
-            ? "Connector is faulted."
-            : "Station is inoperative.";
+        if (!c) detail = "Unknown connector.";
+        else if (c.status === "Faulted") detail = "Connector is faulted.";
+        else detail = "Station is inoperative.";
       } else if (c.status === "Charging") {
         status = "Rejected";
         detail = "A transaction is already running on this connector.";
@@ -418,3 +711,5 @@ export function runCommand(id: string, req: CommandRequest): CommandResponse | n
     snapshot,
   };
 }
+
+export const siteTypes: SiteType[] = ["commercial", "municipal", "state-park", "transit", "park-and-ride"];

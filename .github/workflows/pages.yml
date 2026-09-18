@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "15 9 * * *" # daily rebuild so day counts on the boards stay current
 
 permissions:
   contents: read

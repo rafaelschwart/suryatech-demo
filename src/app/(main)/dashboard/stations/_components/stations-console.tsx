@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 import {
   Activity,
@@ -58,10 +59,12 @@ import type {
 
 const POLL_MS = 3000;
 
-const covers: Record<string, string> = {
-  "ST-LOWELL-01": "/media/site-commercial-v2.webp",
-  "ST-SAMPLE-02": "/media/site-municipal-v2.webp",
-  "ST-SAMPLE-03": "/media/site-park-v2.webp",
+const covers: Record<StationSnapshot["siteType"], string> = {
+  commercial: "/media/site-commercial-v2.webp",
+  municipal: "/media/site-municipal-v2.webp",
+  "state-park": "/media/site-park-v2.webp",
+  transit: "/media/site-municipal-v2.webp",
+  "park-and-ride": "/media/site-commercial-v2.webp",
 };
 
 const connectorStyle: Record<ConnectorStatus, string> = {
@@ -87,6 +90,7 @@ export function StationsConsole() {
   const [audit, setAudit] = useState<string[]>([]);
   const [daylight, setDaylight] = useState(true);
   const consoleRef = useRef<HTMLDivElement>(null);
+  const requested = useSearchParams().get("station");
 
   const record = useCallback((e: Omit<ApiExchange, "id" | "at">) => {
     setExchanges((prev) => [{ id: newId(), at: new Date().toISOString(), ...e }, ...prev].slice(0, 40));
@@ -134,9 +138,13 @@ export function StationsConsole() {
     );
     if (list) {
       setStations(list.stations);
-      setSelectedId((cur) => cur ?? list.stations[0]?.id ?? null);
+      setSelectedId((cur) => {
+        if (cur) return cur;
+        if (requested && list.stations.some((s) => s.id === requested)) return requested;
+        return list.stations[0]?.id ?? null;
+      });
     }
-  }, [call, daylight]);
+  }, [call, daylight, requested]);
 
   useEffect(() => {
     void refresh();
@@ -502,7 +510,7 @@ function StationCard({
     >
       <div className="relative -mx-4 -mt-4 mb-1 aspect-[16/6] overflow-hidden bg-muted">
         <Image
-          src={covers[station.id] ?? "/media/site-municipal-v2.webp"}
+          src={covers[station.siteType]}
           alt="Illustrative charging-site setting; not a photograph of this station"
           fill
           sizes="(min-width: 1024px) 33vw, 100vw"

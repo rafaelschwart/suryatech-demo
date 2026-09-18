@@ -4,15 +4,31 @@ Operating dashboard for Suryatech EV Power LLC as a vendor on the Massachusetts 
 
 ## What it does
 
+The dashboard has two halves, and the overview shows both.
+
+**Overview** (`/dashboard/overview`): fleet numbers, the map, one line per station, then the next filings, the requests worth a response and the state of the response pipeline. Every block links to the section that owns it.
+
+**Project operations** (Phase 2, simulated)
+
 | Screen | Route | What it achieves |
 |---|---|---|
-| Deadline board | `/dashboard/overview` | Every date Suryatech owes, on one board: request closings, SDP report, MBE renewal, MassCEC milestones |
+| Locations map | `/dashboard/operations` | Seven stations across greater Boston on a Leaflet map; click a marker or a row for status, live readings, today and 30-day sessions, revenue, connectors, faults, the 90-minute curve and a power check |
+| Power and performance | `/dashboard/stations` | The station console: telemetry, energy flow, the 3D unit, remote commands over the OCPP-style API, every call shown. `?station=ID` preselects |
+| Sessions and revenue | `/dashboard/revenue` | Cars charged, energy delivered and revenue, today and over 30 days, per station and per day, with uptime |
+
+**Package preparation**
+
+| Screen | Route | What it achieves |
+|---|---|---|
+| Deadline board | `/dashboard/deadlines` | Every date Suryatech owes, on one board: request closings, SDP report, MBE renewal, MassCEC milestones |
 | Opportunities | `/dashboard/opportunities` | Watches the COMMBUYS public bid search, records every VEH122 request, and gives each a Chase / Consider / Pass verdict with reasons |
 | Response assembler | `/dashboard/assembler` | The buyer's required format (MAPC, seven tabs) filled from the company record and the library, with what is missing counted per tab |
 | Answer library | `/dashboard/library` | Company constants, scope blocks, rate card, references, form templates, written once |
 | Evidence register | `/dashboard/evidence` | Recurring compliance obligations with cadence, next date and the document that proves them |
 | Export pack | `/dashboard/export` | The response folder named the way the RFP names it. Builds locally; never uploads |
-| Stations | `/dashboard/stations` | Phase 2. Reads a station API for solar, battery, grid and output; runs power checks; sends remote commands with every call shown |
+| Documents | `/dashboard/documents` | Nine sample PDFs, one or more per stage |
+
+Only the Lowell station comes from the public record; the other six are illustrative placements on real public lots (Newton, Milton, Cambridge, Braintree, Somerville, Lynn). Map tiles are Esri's light-gray canvas, no key required.
 
 ## Data honesty
 
@@ -30,6 +46,8 @@ Nothing in the app writes to COMMBUYS or any Commonwealth system.
 |---|---|---|
 | `POST` | `/api/watcher/run` | Replays the last verified COMMBUYS search result. `{ "simulateNew": true }` adds one invented posting to show the alert flow |
 | `GET` | `/api/stations` | Live snapshot of every station |
+| `GET` | `/api/fleet/summary` | Fleet totals: online, charging, output, sessions and revenue today and over 30 days, per station |
+| `GET` | `/api/fleet/history?days=30` | Daily sessions, energy and revenue across the fleet |
 | `GET` | `/api/stations/:id` | One station |
 | `GET` | `/api/stations/:id/telemetry?minutes=90` | MeterValues history, one point per minute |
 | `POST` | `/api/stations/:id/commands` | `PowerCheck`, `RemoteStartTransaction`, `RemoteStopTransaction`, `ChangeAvailability`, `Reset`, `GetDiagnostics`, `TriggerMessage` |

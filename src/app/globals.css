@@ -327,3 +327,66 @@ html {
     -webkit-print-color-adjust: exact;
   }
 }
+
+/* Station map markers (Leaflet divIcon). Navy disc, gold bolt, status ring; charging pulses. */
+.st-marker-wrap {
+  background: transparent;
+  border: 0;
+}
+.st-marker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: #14284b;
+  box-shadow:
+    0 0 0 3px var(--st),
+    0 4px 12px rgb(0 0 0 / 0.25);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+  cursor: pointer;
+}
+.st-marker svg {
+  width: 16px;
+  height: 16px;
+  fill: #f2a900;
+}
+.st-marker--selected {
+  transform: scale(1.18);
+  box-shadow:
+    0 0 0 3px #f2a900,
+    0 0 0 6px var(--st),
+    0 6px 16px rgb(0 0 0 / 0.3);
+}
+.st-marker--pulse::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid var(--st);
+  animation: st-pulse 1.8s ease-out infinite;
+}
+@keyframes st-pulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+.leaflet-container {
+  font-family: inherit;
+  background: var(--muted);
+}
+.leaflet-container .leaflet-tooltip {
+  border-radius: 6px;
+  font-size: 12px;
+}
+.leaflet-container .leaflet-control-attribution {
+  font-size: 10px;
+}

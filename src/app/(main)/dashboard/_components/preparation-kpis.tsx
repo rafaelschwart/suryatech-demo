@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-interface OverviewKpisProps {
+interface PreparationKpisProps {
   sdpDaysLeft: number;
   sdpDue: string;
   sdpQuarter: string;
@@ -12,7 +12,7 @@ interface OverviewKpisProps {
   contractDaysLeft: number;
 }
 
-export function OverviewKpis({
+export function PreparationKpis({
   sdpDaysLeft,
   sdpDue,
   sdpQuarter,
@@ -20,7 +20,7 @@ export function OverviewKpis({
   awarded,
   chase,
   contractDaysLeft,
-}: OverviewKpisProps) {
+}: PreparationKpisProps) {
   const sdpTone = sdpDaysLeft <= 14 ? "critical" : sdpDaysLeft <= 45 ? "warning" : "ok";
   const years = (contractDaysLeft / 365).toFixed(1);
 

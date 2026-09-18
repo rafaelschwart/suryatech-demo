@@ -1,10 +1,12 @@
 import {
   BookOpen,
   CalendarClock,
+  CircleDollarSign,
   FileCheck2,
   Files,
-  Gauge,
+  LayoutDashboard,
   type LucideIcon,
+  MapPin,
   PackageCheck,
   Radar,
   ShieldCheck,
@@ -49,26 +51,41 @@ export interface NavGroup {
   items: NavMainItem[];
 }
 
+/**
+ * Two halves of the business. Project operations: where the stations are and what they do.
+ * Package preparation: what VEH122 asks for and what is due. The overview shows both.
+ */
 export const sidebarItems: NavGroup[] = [
   {
     id: 1,
-    label: "Response desk",
+    items: [{ id: "overview", title: "Overview", url: "/dashboard/overview", icon: LayoutDashboard }],
+  },
+  {
+    id: 2,
+    label: "Project operations",
     items: [
-      { id: "overview", title: "Deadline board", url: "/dashboard/overview", icon: CalendarClock },
+      { id: "operations", title: "Locations map", url: "/dashboard/operations", icon: MapPin, badge: "phase 2" },
+      { id: "stations", title: "Power and performance", url: "/dashboard/stations", icon: Zap, badge: "phase 2" },
+      {
+        id: "revenue",
+        title: "Sessions and revenue",
+        url: "/dashboard/revenue",
+        icon: CircleDollarSign,
+        badge: "phase 2",
+      },
+    ],
+  },
+  {
+    id: 3,
+    label: "Package preparation",
+    items: [
+      { id: "deadlines", title: "Deadline board", url: "/dashboard/deadlines", icon: CalendarClock },
       { id: "opportunities", title: "Opportunities", url: "/dashboard/opportunities", icon: Radar },
       { id: "assembler", title: "Response assembler", url: "/dashboard/assembler", icon: FileCheck2 },
       { id: "library", title: "Answer library", url: "/dashboard/library", icon: BookOpen },
       { id: "evidence", title: "Evidence register", url: "/dashboard/evidence", icon: ShieldCheck },
       { id: "export", title: "Export pack", url: "/dashboard/export", icon: PackageCheck },
       { id: "documents", title: "Documents", url: "/dashboard/documents", icon: Files },
-    ],
-  },
-  {
-    id: 2,
-    label: "Stations",
-    items: [
-      { id: "stations", title: "Power and performance", url: "/dashboard/stations", icon: Zap, badge: "phase 2" },
-      { id: "fleet", title: "Fleet overview", url: "/dashboard/stations#fleet", icon: Gauge, badge: "phase 2" },
     ],
   },
 ];
