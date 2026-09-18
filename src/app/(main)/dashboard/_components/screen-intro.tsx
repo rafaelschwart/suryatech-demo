@@ -1,8 +1,12 @@
 import type { ReactNode } from "react";
 
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Provenance } from "@/data/company";
+import type { FlowId } from "@/data/flows";
 import { cn } from "@/lib/utils";
+
+import { ProcessFlow } from "./process-flow";
 
 const provenanceStyles: Record<Provenance, string> = {
   public: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
@@ -32,17 +36,20 @@ export function ProvenanceBadge({ kind, className }: { kind: Provenance; classNa
 interface ScreenIntroProps {
   eyebrow: string;
   title: string;
+  /** One sentence. The rest of the screen explains itself. */
   achieves: ReactNode;
   provenance: { kind: Provenance; text: string }[];
   actions?: ReactNode;
   phase?: 1 | 2;
+  /** Which process this screen belongs to and where on it. */
+  flow?: { id: FlowId; step?: string };
 }
 
 /**
- * Every screen opens with this: what the section achieves for Suryatech in one paragraph,
- * and where the data on the screen comes from, so a viewer never mistakes a sample for a fact.
+ * Every screen opens with this: title, one sentence, the data sources as labels (full text on
+ * hover), and the process flow with this screen's step lit.
  */
-export function ScreenIntro({ eyebrow, title, achieves, provenance, actions, phase = 1 }: ScreenIntroProps) {
+export function ScreenIntro({ eyebrow, title, achieves, provenance, actions, phase = 1, flow }: ScreenIntroProps) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -53,22 +60,30 @@ export function ScreenIntro({ eyebrow, title, achieves, provenance, actions, pha
               Phase {phase}
             </Badge>
           </div>
-          <h1 className="font-medium text-2xl leading-tight tracking-tight sm:text-3xl sm:leading-none">{title}</h1>
+          <h1 className="font-medium text-2xl leading-tight tracking-tight">{title}</h1>
+          <p className="max-w-3xl text-muted-foreground text-sm">{achieves}</p>
         </div>
         {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
       </div>
-      <div className="rounded-lg border border-l-4 border-l-primary bg-card px-4 py-3 text-card-foreground">
-        <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">What this section achieves</p>
-        <p className="mt-1 max-w-4xl text-sm leading-relaxed">{achieves}</p>
-        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-          {provenance.map((p) => (
-            <span key={`${p.kind}-${p.text}`} className="flex items-center gap-2 text-muted-foreground text-xs">
-              <ProvenanceBadge kind={p.kind} />
-              <span>{p.text}</span>
-            </span>
-          ))}
-        </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-muted-foreground text-xs">Data:</span>
+        {provenance.map((p) => (
+          <Tooltip key={`${p.kind}-${p.text}`}>
+            <TooltipTrigger asChild>
+              <span className="cursor-help">
+                <ProvenanceBadge kind={p.kind} />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs text-xs leading-relaxed">{p.text}</TooltipContent>
+          </Tooltip>
+        ))}
+        <span className="text-[11px] text-muted-foreground">hover for the source</span>
       </div>
+      {flow ? (
+        <div className="rounded-xl border bg-card px-3 py-3">
+          <ProcessFlow flow={flow.id} current={flow.step} />
+        </div>
+      ) : null}
     </div>
   );
 }

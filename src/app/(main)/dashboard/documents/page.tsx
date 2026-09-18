@@ -16,8 +16,9 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Documents"
+        flow={{ id: "prep", step: "submit" }}
         title="What the desk puts on paper, stage by stage."
-        achieves="Every stage of the process ends in a document somebody reads: the buyer's request captured as a record, the morning digest, the response tabs, the pack manifest, the submission record, the quarterly SDP report, the station power check. These are the samples, on Suryatech letterhead, generated from the same data the screens show. Open any of them to see what Mayur would receive."
+        achieves="One sample document per stage, on SuryaTech letterhead."
         provenance={[
           {
             kind: "public",

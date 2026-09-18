@@ -16,8 +16,9 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Opportunities"
+        flow={{ id: "prep", step: "watch" }}
         title="Every VEH122 request, the day it posts, with a verdict."
-        achieves="A scheduled job runs the COMMBUYS public bid search on several keyword variants and the EV charging commodity code, records every new request as a row, and re-reads open bids daily for amendments. Each row then gets a triage verdict, Chase, Consider or Pass, with the reasons printed next to it, so Mayur decides in a minute which of the requests are worth a response. Nine went by in the first seven months of the contract. This screen is why the tenth does not."
+        achieves="Every VEH122 request the day it posts, with a Chase, Consider or Pass verdict."
         provenance={[
           {
             kind: "public",

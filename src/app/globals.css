@@ -390,3 +390,102 @@ html {
 .leaflet-container .leaflet-control-attribution {
   font-size: 10px;
 }
+
+/* Process flow stepper. Navy nodes, gold current step, gold pulse travelling along the rail. */
+.pf-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: #14284b;
+  color: #fff;
+  box-shadow:
+    0 0 0 3px var(--card),
+    0 0 0 4px rgb(20 40 75 / 0.25);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+.pf[data-size="large"] .pf-node {
+  width: 52px;
+  height: 52px;
+}
+.pf-node:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 3px var(--card),
+    0 0 0 5px #f2a900;
+}
+.pf-node--current {
+  background: #f2a900;
+  color: #14284b;
+  animation: pf-glow 1.6s ease-in-out infinite;
+}
+.pf-num {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  padding: 2px 3px;
+  border: 1px solid rgb(20 40 75 / 0.25);
+  border-radius: 4px;
+  background: var(--card);
+  color: #14284b;
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+}
+.pf-rail {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  z-index: 0;
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgb(20 40 75 / 0.16);
+  transform: translateY(-50%);
+}
+.pf[data-size="large"] .pf-rail {
+  top: 26px;
+}
+.pf-rail::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% + 22px);
+  height: 100%;
+  background: repeating-linear-gradient(90deg, #f2a900 0 10px, transparent 10px 22px);
+  animation: pf-flow 1.1s linear infinite;
+}
+@keyframes pf-flow {
+  from {
+    transform: translateX(-22px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes pf-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px var(--card),
+      0 0 0 5px #f2a900;
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px var(--card),
+      0 0 0 9px rgb(242 169 0 / 0.35);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-rail::after,
+  .pf-node--current {
+    animation: none;
+  }
+}

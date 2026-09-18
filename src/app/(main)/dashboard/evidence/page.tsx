@@ -15,8 +15,9 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Evidence register"
+        flow={{ id: "prep", step: "prove" }}
         title="The obligations that outlast any single request, with their documents."
-        achieves="Winning a VEH122 purchase order creates paperwork that recurs for years: an SDP spending report every quarter within 45 days of quarter end, MBE renewal every three years or the company drops off the state directory, MassCEC milestone reports paid against deliverables. This register holds one row per obligation, the document that proves it and the date it is next due, so reporting becomes retrieval instead of reconstruction. It reports what it is given. It does not assert that Suryatech is compliant."
+        achieves="Recurring obligations, their cadence, and the document that proves each one."
         provenance={[
           {
             kind: "public",

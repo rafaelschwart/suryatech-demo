@@ -11,8 +11,9 @@ export default function Page() {
       <ScreenIntro
         phase={2}
         eyebrow="Project operations · Locations"
+        flow={{ id: "ops", step: "locate" }}
         title="Every station on the map, one click from its numbers."
-        achieves="The fleet across greater Boston as an operator sees it: where each hybrid charger stands, whether it is charging, available, faulted or out of service, and, on a click, its live readings, what it did today, what it earned over the last month, its connectors and its open faults. A power check runs from the same panel. Sites are placed on the kinds of public lots VEH122 buyers ask for: municipal lots, DCR parks, MBTA and MassDOT park-and-rides."
+        achieves="Every station on the map. Click one to open it."
         provenance={[
           {
             kind: "public",

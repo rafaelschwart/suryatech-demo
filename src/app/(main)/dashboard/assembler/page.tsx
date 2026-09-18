@@ -8,8 +8,9 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Response assembler"
+        flow={{ id: "prep", step: "assemble" }}
         title="The buyer's required format, filled from what Suryatech already has."
-        achieves="A VEH122 request is answered in the buyer's structure, not in prose. This screen takes that structure, here MAPC's seven tabs, and fills every field it can from the company record and the answer library, marks what still needs a person, and counts what is missing per tab. Company facts fill automatically, past scope text and rates pull from the library, and the red items are the only real work left. It does not write scope, set a price or invent a reference. A person reviews and a person sends."
+        achieves="The buyer's format, filled from the library. Red items are the real work."
         provenance={[
           {
             kind: "public",

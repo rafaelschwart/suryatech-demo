@@ -1,16 +1,18 @@
 import {
   BookOpen,
+  Box,
   CalendarClock,
   CircleDollarSign,
   FileCheck2,
   Files,
+  KanbanSquare,
   LayoutDashboard,
   type LucideIcon,
   MapPin,
   PackageCheck,
   Radar,
   ShieldCheck,
-  Zap,
+  Wrench,
 } from "lucide-react";
 
 export type NavBadge = "new" | "soon" | "phase 2";
@@ -52,8 +54,8 @@ export interface NavGroup {
 }
 
 /**
- * Two halves of the business. Project operations: where the stations are and what they do.
- * Package preparation: what VEH122 asks for and what is due. The overview shows both.
+ * Two halves of the business, each in the order of its process flow. Project operations: locate,
+ * inspect, bill, maintain. Package preparation: board, watch, assemble, prove, export, submit, report.
  */
 export const sidebarItems: NavGroup[] = [
   {
@@ -65,7 +67,7 @@ export const sidebarItems: NavGroup[] = [
     label: "Project operations",
     items: [
       { id: "operations", title: "Locations map", url: "/dashboard/operations", icon: MapPin, badge: "phase 2" },
-      { id: "stations", title: "Power and performance", url: "/dashboard/stations", icon: Zap, badge: "phase 2" },
+      { id: "stations", title: "Station detail", url: "/dashboard/stations", icon: Box, badge: "phase 2" },
       {
         id: "revenue",
         title: "Sessions and revenue",
@@ -73,19 +75,21 @@ export const sidebarItems: NavGroup[] = [
         icon: CircleDollarSign,
         badge: "phase 2",
       },
+      { id: "work-orders", title: "Work orders", url: "/dashboard/work-orders", icon: Wrench, badge: "phase 2" },
     ],
   },
   {
     id: 3,
     label: "Package preparation",
     items: [
-      { id: "deadlines", title: "Deadline board", url: "/dashboard/deadlines", icon: CalendarClock },
+      { id: "board", title: "Response board", url: "/dashboard/board", icon: KanbanSquare },
       { id: "opportunities", title: "Opportunities", url: "/dashboard/opportunities", icon: Radar },
       { id: "assembler", title: "Response assembler", url: "/dashboard/assembler", icon: FileCheck2 },
       { id: "library", title: "Answer library", url: "/dashboard/library", icon: BookOpen },
       { id: "evidence", title: "Evidence register", url: "/dashboard/evidence", icon: ShieldCheck },
       { id: "export", title: "Export pack", url: "/dashboard/export", icon: PackageCheck },
       { id: "documents", title: "Documents", url: "/dashboard/documents", icon: Files },
+      { id: "deadlines", title: "Deadline board", url: "/dashboard/deadlines", icon: CalendarClock },
     ],
   },
 ];

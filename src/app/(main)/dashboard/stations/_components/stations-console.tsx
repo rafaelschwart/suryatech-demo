@@ -2,23 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
-import {
-  Activity,
-  BatteryCharging,
-  Cable,
-  FileDown,
-  Play,
-  Power,
-  RadioTower,
-  RotateCcw,
-  Square,
-  Sun,
-  ThermometerSun,
-  Zap,
-} from "lucide-react";
+import { Activity, Cable, FileDown, Play, Power, RotateCcw, Square, ThermometerSun, type Zap } from "lucide-react";
 import { toast } from "sonner";
 
 import { ProvenanceBadge } from "@/app/(main)/dashboard/_components/screen-intro";
@@ -36,10 +22,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { deskFetch } from "@/lib/desk-api/client";
 import { cn } from "@/lib/utils";
@@ -47,6 +31,7 @@ import { cn } from "@/lib/utils";
 import { ApiConsole, type ApiExchange } from "./api-console";
 import { EnergyFlow } from "./energy-flow";
 import { StationChart } from "./station-chart";
+import { StationHeader } from "./station-header";
 import { StationStage } from "./station-stage";
 import type {
   CommandName,
@@ -58,14 +43,6 @@ import type {
 } from "./types";
 
 const POLL_MS = 3000;
-
-const covers: Record<StationSnapshot["siteType"], string> = {
-  commercial: "/media/site-commercial-v2.webp",
-  municipal: "/media/site-municipal-v2.webp",
-  "state-park": "/media/site-park-v2.webp",
-  transit: "/media/site-municipal-v2.webp",
-  "park-and-ride": "/media/site-commercial-v2.webp",
-};
 
 const connectorStyle: Record<ConnectorStatus, string> = {
   Available: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
@@ -192,43 +169,15 @@ export function StationsConsole() {
     consoleRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
-  const fleet = stations ?? [];
-  const totalOutput = fleet.reduce((n, s) => n + s.outputKw, 0);
-  const totalPv = fleet.reduce((n, s) => n + s.pvKw, 0);
-  const avgSoc = fleet.length ? fleet.reduce((n, s) => n + s.batterySoc, 0) / fleet.length : 0;
-  const sessions = fleet.reduce((n, s) => n + s.sessionsToday, 0);
-  const faults = fleet.reduce((n, s) => n + s.faults.length, 0);
-
   return (
-    <div className="flex flex-col gap-4" id="fleet">
-      <div className="flex items-center justify-between gap-3 rounded-lg border border-dashed px-3 py-2">
-        <Label htmlFor="daylight-clock" className="text-muted-foreground text-xs">
-          Simulated clock at 12:30, so the solar curve is visible at any hour. Switch off to use the real time of day.
-        </Label>
-        <Switch id="daylight-clock" checked={daylight} onCheckedChange={setDaylight} />
-      </div>
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-        <FleetKpi icon={Zap} label="EV output now" value={`${totalOutput.toFixed(1)} kW`} loading={!stations} />
-        <FleetKpi icon={Sun} label="Solar now" value={`${totalPv.toFixed(1)} kW`} loading={!stations} />
-        <FleetKpi icon={BatteryCharging} label="Average battery" value={`${avgSoc.toFixed(0)}%`} loading={!stations} />
-        <FleetKpi icon={Activity} label="Sessions today" value={String(sessions)} loading={!stations} />
-        <FleetKpi
-          icon={RadioTower}
-          label="Open faults"
-          value={String(faults)}
-          tone={faults ? "critical" : "ok"}
-          loading={!stations}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
-        {stations
-          ? stations.map((s) => (
-              <StationCard key={s.id} station={s} selected={s.id === selectedId} onSelect={() => setSelectedId(s.id)} />
-            ))
-          : [0, 1, 2].map((i) => <Skeleton key={i} className="h-40 rounded-xl" />)}
-      </div>
-
+    <div className="flex flex-col gap-4">
+      <StationHeader
+        stations={stations}
+        selected={selected}
+        onSelect={setSelectedId}
+        daylight={daylight}
+        onDaylight={setDaylight}
+      />
       {selected ? (
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
           <div className="xl:col-span-5">
@@ -281,7 +230,7 @@ export function StationsConsole() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Controls</CardTitle>
+                <CardTitle id="controls">Controls</CardTitle>
                 <CardDescription>
                   Each button sends one call to{" "}
                   <span className="font-mono">POST /api/stations/{selected.id}/commands</span>. Destructive ones ask
@@ -439,136 +388,6 @@ export function StationsConsole() {
         </div>
       ) : null}
     </div>
-  );
-}
-
-function FleetKpi({
-  icon: Icon,
-  label,
-  value,
-  tone = "neutral",
-  loading,
-}: {
-  icon: typeof Zap;
-  label: string;
-  value: string;
-  tone?: "neutral" | "ok" | "critical";
-  loading: boolean;
-}) {
-  return (
-    <Card size="sm" className="gap-2">
-      <CardHeader className="pb-0">
-        <CardDescription className="flex items-center gap-1.5 text-xs">
-          <Icon className="size-3.5" />
-          {label}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <Skeleton className="h-7 w-20" />
-        ) : (
-          <div
-            className={cn(
-              "text-2xl tabular-nums leading-none tracking-tight",
-              tone === "critical" && "text-destructive",
-              tone === "ok" && "text-emerald-700 dark:text-emerald-300",
-            )}
-          >
-            {value}
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
-function StationCard({
-  station,
-  selected,
-  onSelect,
-}: {
-  station: StationSnapshot;
-  selected: boolean;
-  onSelect: () => void;
-}) {
-  const worst = station.faults.length
-    ? "fault"
-    : !station.online
-      ? "offline"
-      : station.availability === "Inoperative"
-        ? "out"
-        : "ok";
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      aria-pressed={selected}
-      className={cn(
-        "group flex flex-col gap-3 overflow-hidden rounded-xl border bg-card p-4 text-left text-card-foreground transition-colors hover:bg-muted/40 focus-visible:outline-2 focus-visible:outline-ring",
-        selected && "border-primary ring-1 ring-primary",
-      )}
-    >
-      <div className="relative -mx-4 -mt-4 mb-1 aspect-[16/6] overflow-hidden bg-muted">
-        <Image
-          src={covers[station.siteType]}
-          alt="Illustrative charging-site setting; not a photograph of this station"
-          fill
-          sizes="(min-width: 1024px) 33vw, 100vw"
-          className="object-cover"
-        />
-        <span className="absolute right-2 bottom-2 rounded-sm bg-slate-950/75 px-2 py-1 text-[10px] text-white">
-          Illustrative site
-        </span>
-      </div>
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="truncate font-medium leading-tight">{station.name}</p>
-          <p className="font-mono text-muted-foreground text-xs">{station.id}</p>
-        </div>
-        <Badge
-          variant="secondary"
-          className={cn(
-            "shrink-0 gap-1 rounded-sm px-1.5 py-0.5",
-            worst === "ok" && "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-            worst === "fault" && "bg-destructive/10 text-destructive",
-            (worst === "offline" || worst === "out") && "bg-muted text-muted-foreground",
-          )}
-        >
-          <span
-            className={cn(
-              "size-1.5 rounded-full",
-              worst === "ok" ? "bg-emerald-500" : worst === "fault" ? "bg-destructive" : "bg-muted-foreground",
-            )}
-          />
-          {worst === "ok"
-            ? "Healthy"
-            : worst === "fault"
-              ? "Fault"
-              : worst === "offline"
-                ? "Rebooting"
-                : "Out of service"}
-        </Badge>
-      </div>
-      <div className="grid grid-cols-3 gap-2 text-xs">
-        <div>
-          <p className="text-muted-foreground">Output</p>
-          <p className="font-medium tabular-nums">{station.outputKw.toFixed(1)} kW</p>
-        </div>
-        <div>
-          <p className="text-muted-foreground">Solar</p>
-          <p className="font-medium tabular-nums">{station.pvKw.toFixed(1)} kW</p>
-        </div>
-        <div>
-          <p className="text-muted-foreground">Battery</p>
-          <p className="font-medium tabular-nums">{station.batterySoc.toFixed(0)}%</p>
-        </div>
-      </div>
-      <Progress value={station.batterySoc} className="h-1.5" />
-      <div className="flex items-center justify-between">
-        <ProvenanceBadge kind={station.provenance} />
-        <span className="text-muted-foreground text-xs">{station.sessionsToday} sessions today</span>
-      </div>
-    </button>
   );
 }
 

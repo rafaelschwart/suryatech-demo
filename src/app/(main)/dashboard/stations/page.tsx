@@ -10,9 +10,10 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         phase={2}
-        eyebrow="Stations"
-        title="Power checks and performance, over the station API."
-        achieves="Each hybrid charger reports through the standard charge-point protocol, OCPP, to a management system that exposes an API. This screen reads that API every few seconds for solar production, battery state of charge, grid draw and charging output, runs a power check on demand that compares every reading to a threshold, and sends remote commands: start or stop a session, take a station out of service, reboot it, pull diagnostics. Every request and response is shown as it happens, so the integration is visible rather than implied. This is Phase 2 in the proposal because it depends on validated hardware interfaces and deployed units."
+        eyebrow="Project operations · Station detail"
+        title="One station: the unit, its power, what it consumed, what it accepts."
+        achieves="The 3D unit, how power moves through it, the last 90 minutes, and the commands the management system accepts, every call shown."
+        flow={{ id: "ops", step: "inspect" }}
         provenance={[
           {
             kind: "simulated",

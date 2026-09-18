@@ -10,8 +10,9 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Answer library"
+        flow={{ id: "prep", step: "assemble" }}
         title="The parts a response is built from, written once."
-        achieves="Every VEH122 response asks for the same things: company facts, signed certification forms, scope paragraphs, an hourly rate, references. Today each is rebuilt from scratch. This library holds each part once, records where it was last used, and feeds the assembler. The first response is expensive. The eighth mostly assembles itself, because the contract runs to 2033 and the buyers repeat."
+        achieves="Company facts and reusable answers, written once."
         provenance={[
           { kind: "public", text: "Company constants come from COMMBUYS, LinkedIn and the Lowell filing." },
           {

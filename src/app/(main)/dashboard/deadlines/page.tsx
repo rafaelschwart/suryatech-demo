@@ -9,7 +9,6 @@ import { buildDeadlineRows } from "@/lib/deadlines";
 import { scoreOpportunity } from "@/lib/fit";
 
 import { DeadlineTable } from "./_components/deadline-table";
-import { DeskFlow } from "./_components/desk-flow";
 
 export default function Page() {
   const now = new Date();
@@ -26,8 +25,9 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Deadline board"
+        flow={{ id: "prep", step: "report" }}
         title={`What is due, and what already went by. ${format(now, "EEEE, MMMM d, yyyy")}.`}
-        achieves="One place that puts a date on everything Suryatech owes: the next VEH122 request closing, the next SDP spending report, the MBE renewal, the MassCEC milestones. Being on the state contract does not bring orders, it brings requests with deadlines. This board exists so the next one is visible the day it posts, beside the filing already owed."
+        achieves="Every date Suryatech owes, on one board."
         provenance={[
           {
             kind: "public",
@@ -48,7 +48,6 @@ export default function Page() {
         chase={chase}
         contractDaysLeft={contractDaysLeft}
       />
-      <DeskFlow />
       <DeadlineTable rows={rows} />
     </div>
   );

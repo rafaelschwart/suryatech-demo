@@ -4,31 +4,33 @@ Operating dashboard for Suryatech EV Power LLC as a vendor on the Massachusetts 
 
 ## What it does
 
-The dashboard has two halves, and the overview shows both.
+Two halves, each laid out as a process flow. Every screen shows the flow under its title with its own step lit, and opens with one sentence plus data-source labels (hover for the source).
 
-**Overview** (`/dashboard/overview`): fleet numbers, the map, one line per station, then the next filings, the requests worth a response and the state of the response pipeline. Every block links to the section that owns it.
+**Overview** (`/dashboard/overview`): a "needs attention" list merged from live station faults and package deadlines, both flows with live counts on every step, today's fleet numbers, the response board by column, and the next deadlines. No map here; the map is one click away.
 
-**Project operations** (Phase 2, simulated)
-
-| Screen | Route | What it achieves |
-|---|---|---|
-| Locations map | `/dashboard/operations` | Seven stations across greater Boston on a Leaflet map; click a marker or a row for status, live readings, today and 30-day sessions, revenue, connectors, faults, the 90-minute curve and a power check |
-| Power and performance | `/dashboard/stations` | The station console: telemetry, energy flow, the 3D unit, remote commands over the OCPP-style API, every call shown. `?station=ID` preselects |
-| Sessions and revenue | `/dashboard/revenue` | Cars charged, energy delivered and revenue, today and over 30 days, per station and per day, with uptime |
-
-**Package preparation**
+**Project operations** (Phase 2, simulated): Locate, Inspect, Control, Bill, Maintain.
 
 | Screen | Route | What it achieves |
 |---|---|---|
-| Deadline board | `/dashboard/deadlines` | Every date Suryatech owes, on one board: request closings, SDP report, MBE renewal, MassCEC milestones |
-| Opportunities | `/dashboard/opportunities` | Watches the COMMBUYS public bid search, records every VEH122 request, and gives each a Chase / Consider / Pass verdict with reasons |
-| Response assembler | `/dashboard/assembler` | The buyer's required format (MAPC, seven tabs) filled from the company record and the library, with what is missing counted per tab |
-| Answer library | `/dashboard/library` | Company constants, scope blocks, rate card, references, form templates, written once |
-| Evidence register | `/dashboard/evidence` | Recurring compliance obligations with cadence, next date and the document that proves them |
-| Export pack | `/dashboard/export` | The response folder named the way the RFP names it. Builds locally; never uploads |
+| Locations map | `/dashboard/operations` | Seven stations across greater Boston on a Leaflet map; click a marker for status and readings, then Open station |
+| Station detail | `/dashboard/stations?station=ID` | One station: the 3D unit, power distribution, the 90-minute consumption curve, remote commands over the OCPP-style API, every call shown. Switch stations from the header |
+| Sessions and revenue | `/dashboard/revenue` | Cars charged, energy delivered, revenue and uptime, today and over 30 days |
+| Work orders | `/dashboard/work-orders` | Kanban of faults and maintenance: Reported, Scheduled, On site, Resolved |
+
+**Package preparation**: Watch, Triage, Assemble, Prove, Export, Submit, Report.
+
+| Screen | Route | What it achieves |
+|---|---|---|
+| Response board | `/dashboard/board` | Two Kanbans: responses from Watching to Closed, and filings from Upcoming to Filed. Drag to move; moves persist in the browser |
+| Opportunities | `/dashboard/opportunities` | Every VEH122 request with a Chase / Consider / Pass verdict and its reasons |
+| Response assembler | `/dashboard/assembler` | The MAPC seven-tab format filled from the library, missing items counted per tab |
+| Answer library | `/dashboard/library` | Company constants, scope blocks, rate card, references, form templates |
+| Evidence register | `/dashboard/evidence` | Compliance obligations with cadence, next date and proof document |
+| Export pack | `/dashboard/export` | The response folder named the RFP's way. Builds locally, never uploads |
 | Documents | `/dashboard/documents` | Nine sample PDFs, one or more per stage |
+| Deadline board | `/dashboard/deadlines` | Every date Suryatech owes, on one board |
 
-Only the Lowell station comes from the public record; the other six are illustrative placements on real public lots (Newton, Milton, Cambridge, Braintree, Somerville, Lynn). Map tiles are Esri's light-gray canvas, no key required.
+Shared pieces: `src/data/flows.ts` (the two flows), `_components/process-flow.tsx` (animated stepper), `_components/kanban.tsx` (native drag and drop, localStorage), `src/data/boards.ts` (board cards). Only the Lowell station is public record; the other six are illustrative placements on real public lots. Map tiles are Esri light-gray canvas, no key required.
 
 ## Data honesty
 

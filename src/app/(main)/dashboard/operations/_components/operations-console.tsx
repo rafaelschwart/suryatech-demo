@@ -23,7 +23,7 @@ const LEGEND: { key: StationStatusKey; label: string; color: string }[] = [
 
 /** Map on the left, the selected station on the right, every station as a table below. */
 export function OperationsConsole() {
-  const { stations, replace } = useFleet(3000);
+  const { stations } = useFleet(3000);
   const requested = useSearchParams().get("station");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -64,7 +64,7 @@ export function OperationsConsole() {
           </ul>
         </div>
         <div className="xl:col-span-5">
-          <StationPanel station={selected} onSnapshot={replace} />
+          <StationPanel station={selected} />
         </div>
       </div>
       <StationsTable stations={stations} selectedId={selectedId} onSelect={setSelectedId} />

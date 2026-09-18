@@ -1,37 +1,127 @@
-import Link from "next/link";
-
 import { format } from "date-fns";
-import { ArrowUpRight } from "lucide-react";
 
-import { PreparationKpis } from "@/app/(main)/dashboard/_components/preparation-kpis";
 import { ScreenIntro } from "@/app/(main)/dashboard/_components/screen-intro";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { COMPANY } from "@/data/company";
-import { daysUntil, sdpReportSchedule } from "@/data/obligations";
+import { responseCards, responseColumns } from "@/data/boards";
+import { mapcExportPack, mapcResponse } from "@/data/mapc-response";
+import { buildObligations, sdpReportSchedule } from "@/data/obligations";
 import { opportunities } from "@/data/opportunities";
 import { buildDeadlineRows, upcomingDeadlines } from "@/lib/deadlines";
 import { API_IN_BROWSER } from "@/lib/desk-api/flags";
 import { scoreOpportunity } from "@/lib/fit";
 
-import { OverviewOperations } from "./_components/overview-operations";
-import { OverviewPreparation } from "./_components/overview-preparation";
+import { type AttentionItem, OverviewLive } from "./_components/overview-live";
+
+const toneClass: Record<string, string> = {
+  navy: "bg-[#14284B]",
+  gold: "bg-[#F2A900]",
+  sky: "bg-sky-500",
+  emerald: "bg-emerald-500",
+  amber: "bg-amber-500",
+  red: "bg-red-500",
+  muted: "bg-slate-400",
+};
 
 export default function Page() {
   const now = new Date();
   const sdp = sdpReportSchedule(now);
-  const scored = opportunities.map((o) => ({ opportunity: o, fit: scoreOpportunity(o) }));
-  const worth = scored
-    .filter((r) => r.fit.verdict !== "pass")
-    .sort((a, b) => b.fit.score - a.fit.score)
-    .slice(0, 4);
+  const rows = buildDeadlineRows(now);
+  const upcoming = upcomingDeadlines(rows, 5);
+  const obligations = buildObligations(now).filter((o) => o.id !== "veh122");
+  const scored = opportunities.map((o) => scoreOpportunity(o));
+  const chase = scored.filter((f) => f.verdict === "chase").length;
+  const fields = mapcResponse.flatMap((t) => t.fields);
+  const ready = fields.filter((f) => f.state === "ready").length;
+  const missing = fields.filter((f) => f.state === "missing").length;
+  const packReady = mapcExportPack.filter((f) => f.state === "ready").length;
+  const packBlocked = mapcExportPack.filter((f) => f.state === "blocked").length;
+  const openRequests = opportunities.filter((o) => o.status === "open").length;
+
+  const prepAttention: AttentionItem[] = [
+    ...rows
+      .filter((r) => r.daysLeft !== null && r.daysLeft >= 0 && r.daysLeft <= 45)
+      .map((r) => ({
+        id: `dl-${r.id}`,
+        severity: (r.daysLeft ?? 99) <= 14 ? ("critical" as const) : ("warning" as const),
+        title: r.item,
+        detail: `Due ${r.due}, ${r.daysLeft} days`,
+        href: "/dashboard/deadlines",
+      })),
+    ...obligations
+      .filter((o) => o.status === "confirm")
+      .map((o) => ({
+        id: `confirm-${o.id}`,
+        severity: "info" as const,
+        title: `Confirm filed: ${o.name}`,
+        detail: "Past its date. Whether it was filed is unknown until Discovery.",
+        href: "/dashboard/evidence",
+      })),
+    ...(packBlocked
+      ? [
+          {
+            id: "pack-blocked",
+            severity: "warning" as const,
+            title: `${packBlocked} files blocked in the MAPC export pack`,
+            detail: "Signatures and certificates not on file.",
+            href: "/dashboard/export",
+          },
+        ]
+      : []),
+    ...(missing
+      ? [
+          {
+            id: "fields-missing",
+            severity: "info" as const,
+            title: `${missing} fields missing in the MAPC response`,
+            detail: `${ready} of ${fields.length} ready from the library.`,
+            href: "/dashboard/assembler",
+          },
+        ]
+      : []),
+  ];
+
+  const prepCounts = {
+    watch: `${opportunities.length} seen · ${openRequests} open`,
+    triage: `${chase} chase`,
+    assemble: `${ready}/${fields.length} fields`,
+    prove: `${obligations.length} filings`,
+    export: `${packReady}/${mapcExportPack.length} files`,
+    submit: "0 on record",
+    report: `SDP in ${sdp.current.daysLeft} d`,
+  };
+
+  const prepNumbers = [
+    {
+      label: "Next filing",
+      value: `${sdp.current.daysLeft} days`,
+      tone:
+        sdp.current.daysLeft <= 14
+          ? ("critical" as const)
+          : sdp.current.daysLeft <= 45
+            ? ("warning" as const)
+            : undefined,
+    },
+    { label: "Requests seen", value: String(opportunities.length) },
+    { label: "Worth chasing", value: String(chase), tone: "ok" as const },
+    {
+      label: "Pack ready",
+      value: `${packReady} / ${mapcExportPack.length}`,
+      tone: packBlocked ? ("warning" as const) : undefined,
+    },
+  ];
+
+  const cards = responseCards();
+  const boardCounts = responseColumns.map((c) => ({
+    title: c.title,
+    count: cards.filter((k) => k.column === c.id).length,
+    tone: toneClass[c.tone],
+  }));
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Overview"
-        title={`Two halves of one business, on one screen. ${format(now, "EEEE, MMMM d, yyyy")}.`}
-        achieves="Project operations first: where the stations stand, what they are putting out, how many cars charged today and what that earned. Package preparation second: what VEH122 asked for, what is due, and how far the next response is. Everything here is a summary that links to the section that owns it, so a morning starts on this page and ends wherever the number that moved sends you."
+        title={format(now, "EEEE, MMMM d, yyyy")}
+        achieves="What needs attention, where each half of the business stands, and the next step in every flow."
         provenance={[
           {
             kind: "public",
@@ -39,7 +129,7 @@ export default function Page() {
           },
           {
             kind: "simulated",
-            text: "Station readings, sessions and revenue are generated by the simulator. Six of the seven sites are illustrative placements.",
+            text: "Station readings, sessions, revenue and work orders are generated by the simulator. Six of the seven sites are illustrative placements.",
           },
           ...(API_IN_BROWSER
             ? [
@@ -51,75 +141,13 @@ export default function Page() {
             : []),
         ]}
       />
-
-      <section aria-labelledby="ops-heading" className="flex flex-col gap-3">
-        <SectionHeading
-          id="ops-heading"
-          title="Project operations"
-          phase={2}
-          blurb="Locations, power, performance, cars charged, revenue."
-          href="/dashboard/operations"
-          cta="Locations map"
-        />
-        <OverviewOperations />
-      </section>
-
-      <section aria-labelledby="prep-heading" className="flex flex-col gap-3">
-        <SectionHeading
-          id="prep-heading"
-          title="Package preparation"
-          phase={1}
-          blurb="Requests, deadlines, the response and its evidence."
-          href="/dashboard/deadlines"
-          cta="Deadline board"
-        />
-        <PreparationKpis
-          sdpDaysLeft={sdp.current.daysLeft}
-          sdpDue={format(sdp.current.due, "MMM d, yyyy")}
-          sdpQuarter={sdp.current.label}
-          seen={opportunities.length}
-          awarded={opportunities.filter((o) => o.status === "bid-to-po").length}
-          chase={scored.filter((r) => r.fit.verdict === "chase").length}
-          contractDaysLeft={daysUntil(COMPANY.contractEnd, now)}
-        />
-        <OverviewPreparation upcoming={upcomingDeadlines(buildDeadlineRows(now), 5)} worth={worth} />
-      </section>
-    </div>
-  );
-}
-
-function SectionHeading({
-  id,
-  title,
-  phase,
-  blurb,
-  href,
-  cta,
-}: {
-  id: string;
-  title: string;
-  phase: 1 | 2;
-  blurb: string;
-  href: string;
-  cta: string;
-}) {
-  return (
-    <div className="flex flex-wrap items-end justify-between gap-2 border-b pb-2">
-      <div className="flex items-center gap-2">
-        <h2 id={id} className="font-medium text-lg tracking-tight">
-          {title}
-        </h2>
-        <Badge variant="outline" className="h-auto rounded-sm px-1.5 py-0 text-[10px] uppercase tracking-wider">
-          Phase {phase}
-        </Badge>
-        <span className="hidden text-muted-foreground text-sm sm:inline">{blurb}</span>
-      </div>
-      <Button variant="ghost" size="sm" asChild>
-        <Link prefetch={false} href={href}>
-          {cta}
-          <ArrowUpRight data-icon="inline-end" />
-        </Link>
-      </Button>
+      <OverviewLive
+        prepAttention={prepAttention}
+        prepCounts={prepCounts}
+        prepNumbers={prepNumbers}
+        upcoming={upcoming}
+        boardCounts={boardCounts}
+      />
     </div>
   );
 }

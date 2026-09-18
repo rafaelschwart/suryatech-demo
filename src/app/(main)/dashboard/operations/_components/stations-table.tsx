@@ -1,9 +1,14 @@
 "use client";
 
+import Link from "next/link";
+
+import { ArrowUpRight } from "lucide-react";
+
 import { siteTypeLabel, stationStatus, usd } from "@/app/(main)/dashboard/_components/operations/station-status";
 import { ProvenanceBadge } from "@/app/(main)/dashboard/_components/screen-intro";
 import type { StationSnapshot } from "@/app/(main)/dashboard/stations/_components/types";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -22,7 +27,8 @@ export function StationsTable({ stations, selectedId, onSelect }: StationsTableP
       <CardHeader>
         <CardTitle>All stations</CardTitle>
         <CardDescription>
-          Status, live output and what each site earned today. Click a row to open it on the map.
+          Status, live output and what each site earned today. Click a row to select it on the map, Open for the station
+          page.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -40,6 +46,7 @@ export function StationsTable({ stations, selectedId, onSelect }: StationsTableP
                   <TableHead className="text-right">Cars today</TableHead>
                   <TableHead className="text-right">Revenue today</TableHead>
                   <TableHead className="text-right">Uptime 30d</TableHead>
+                  <TableHead className="w-24" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -85,6 +92,14 @@ export function StationsTable({ stations, selectedId, onSelect }: StationsTableP
                       <TableCell className="text-right tabular-nums">{s.sessionsToday}</TableCell>
                       <TableCell className="text-right tabular-nums">{usd(s.revenueTodayUsd, true)}</TableCell>
                       <TableCell className="text-right tabular-nums">{s.uptime30dPct.toFixed(1)}%</TableCell>
+                      <TableCell className="text-right">
+                        <Button size="xs" variant="outline" asChild onClick={(e) => e.stopPropagation()}>
+                          <Link prefetch={false} href={`/dashboard/stations?station=${s.id}`}>
+                            Open
+                            <ArrowUpRight data-icon="inline-end" />
+                          </Link>
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
