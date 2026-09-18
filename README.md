@@ -21,7 +21,7 @@ Two halves, each laid out as a process flow. Every screen shows the flow under i
 
 | Screen | Route | What it achieves |
 |---|---|---|
-| Response board | `/dashboard/board` | Two Kanbans: responses from Watching to Closed, and filings from Upcoming to Filed. Drag to move; moves persist in the browser |
+| Response board | `/dashboard/board` | Responses and filings, each as a list (default) or a drag-and-drop board, with a stage bar above. View choice and moves persist in the browser |
 | Opportunities | `/dashboard/opportunities` | Every VEH122 request with a Chase / Consider / Pass verdict and its reasons |
 | Response assembler | `/dashboard/assembler` | The MAPC seven-tab format filled from the library, missing items counted per tab |
 | Answer library | `/dashboard/library` | Company constants, scope blocks, rate card, references, form templates |
@@ -29,6 +29,8 @@ Two halves, each laid out as a process flow. Every screen shows the flow under i
 | Export pack | `/dashboard/export` | The response folder named the RFP's way. Builds locally, never uploads |
 | Documents | `/dashboard/documents` | Nine sample PDFs, one or more per stage |
 | Deadline board | `/dashboard/deadlines` | Every date Suryatech owes, on one board |
+
+**Landing** (`/dashboard/landing`): a draft of a new suryatechpower.com built from the current site (Firecrawl scrape in the case folder), same navy and gold, stronger hero with the charger loop and a live ticker from the demo fleet. Full-bleed inside the dashboard; nothing is published.
 
 Shared pieces: `src/data/flows.ts` (the two flows), `_components/process-flow.tsx` (animated stepper), `_components/kanban.tsx` (native drag and drop, localStorage), `src/data/boards.ts` (board cards). Only the Lowell station is public record; the other six are illustrative placements on real public lots. Map tiles are Esri light-gray canvas, no key required.
 

@@ -5,6 +5,7 @@ import {
   CircleDollarSign,
   FileCheck2,
   Files,
+  Globe,
   KanbanSquare,
   LayoutDashboard,
   type LucideIcon,
@@ -91,5 +92,10 @@ export const sidebarItems: NavGroup[] = [
       { id: "documents", title: "Documents", url: "/dashboard/documents", icon: Files },
       { id: "deadlines", title: "Deadline board", url: "/dashboard/deadlines", icon: CalendarClock },
     ],
+  },
+  {
+    id: 4,
+    label: "Landing",
+    items: [{ id: "landing", title: "Landing page", url: "/dashboard/landing", icon: Globe, badge: "new" }],
   },
 ];

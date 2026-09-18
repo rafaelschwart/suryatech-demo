@@ -1,4 +1,4 @@
-import { Kanban } from "@/app/(main)/dashboard/_components/kanban";
+import { BoardViews } from "@/app/(main)/dashboard/_components/board-views";
 import { ScreenIntro } from "@/app/(main)/dashboard/_components/screen-intro";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { workOrderCards, workOrderColumns } from "@/data/boards";
@@ -30,7 +30,12 @@ export default function Page() {
           <CardDescription>Seven stations, six open or recent items. Drag a card as the work moves.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Kanban columns={workOrderColumns} cards={workOrderCards} storageKey="suryatech-board-work-orders" />
+          <BoardViews
+            itemLabel="Work order"
+            columns={workOrderColumns}
+            cards={workOrderCards}
+            storageKey="suryatech-board-work-orders"
+          />
         </CardContent>
       </Card>
     </div>
