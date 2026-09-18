@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import type { Provenance } from "@/data/company";
 import { cn } from "@/lib/utils";
 
+import { useDetail } from "./item-detail";
 import { ProvenanceBadge } from "./screen-intro";
 
 export type ColumnTone = "navy" | "gold" | "sky" | "emerald" | "amber" | "red" | "muted";
@@ -81,6 +82,7 @@ function writeMoves(key: string, moves: Record<string, string>) {
  * this browser only; Reset puts every card back where the data says it is.
  */
 export function Kanban({ columns, cards, storageKey, className }: KanbanProps) {
+  const detail = useDetail();
   const [moves, setMoves] = useState<Record<string, string>>({});
   const [dragging, setDragging] = useState<string | null>(null);
   const [over, setOver] = useState<string | null>(null);
@@ -116,7 +118,7 @@ export function Kanban({ columns, cards, storageKey, className }: KanbanProps) {
     <div className={cn("flex flex-col gap-2", className)}>
       {storageKey ? (
         <div className="flex items-center justify-between gap-2 text-muted-foreground text-xs">
-          <span>Drag a card to move it. Moves stay in this browser.</span>
+          <span>Click a card for its detail. Drag to move it; moves stay in this browser.</span>
           <Button variant="ghost" size="xs" onClick={reset} disabled={!moved}>
             <RotateCcw data-icon="inline-start" />
             Reset {moved ? `(${moved})` : ""}
@@ -155,6 +157,13 @@ export function Kanban({ columns, cards, storageKey, className }: KanbanProps) {
                     <li
                       key={c.id}
                       draggable={Boolean(storageKey)}
+                      onClick={() => detail.has(c.id) && detail.open(c.id)}
+                      onKeyDown={(e) => {
+                        if ((e.key === "Enter" || e.key === " ") && detail.has(c.id)) {
+                          e.preventDefault();
+                          detail.open(c.id);
+                        }
+                      }}
                       onDragStart={(e) => {
                         e.dataTransfer.setData("text/plain", c.id);
                         e.dataTransfer.effectAllowed = "move";

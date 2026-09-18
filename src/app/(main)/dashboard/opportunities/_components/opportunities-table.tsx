@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 
 import { ChevronDown, ExternalLink } from "lucide-react";
 
+import { useDetail } from "@/app/(main)/dashboard/_components/item-detail";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +33,7 @@ const statusLabel: Record<Opportunity["status"], string> = {
 };
 
 export function OpportunitiesTable({ rows }: { rows: OpportunityRow[] }) {
+  const detail = useDetail();
   const [filter, setFilter] = useState<"all" | FitVerdict>("all");
   const [open, setOpen] = useState<string | null>(rows[0]?.opportunity.bidNumber ?? null);
   const visible = filter === "all" ? rows : rows.filter((r) => r.fit.verdict === filter);
@@ -41,8 +43,8 @@ export function OpportunitiesTable({ rows }: { rows: OpportunityRow[] }) {
       <CardHeader>
         <CardTitle>Requests on the record</CardTitle>
         <CardDescription>
-          Sorted by fit. Open a row to read why it got its verdict. The verdict is a recommendation with its reasoning
-          exposed, and any row can be overridden.
+          Sorted by fit. Open a row to read why it got its verdict, then Full detail for its stages, timeline and next
+          steps. The verdict is a recommendation with its reasoning exposed, and any row can be overridden.
         </CardDescription>
         <div className="pt-2">
           <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
@@ -148,6 +150,9 @@ export function OpportunitiesTable({ rows }: { rows: OpportunityRow[] }) {
                                     <ExternalLink data-icon="inline-start" />
                                     Open on COMMBUYS
                                   </a>
+                                </Button>
+                                <Button size="sm" onClick={() => detail.open(o.bidNumber)}>
+                                  Full detail
                                 </Button>
                                 <Button size="sm" variant="outline" disabled>
                                   Override verdict

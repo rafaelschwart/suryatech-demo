@@ -1,3 +1,6 @@
+"use client";
+
+import { useDetail } from "@/app/(main)/dashboard/_components/item-detail";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -25,13 +28,14 @@ const statusStyle: Record<DeadlineRow["status"], { label: (r: DeadlineRow) => st
 };
 
 export function DeadlineTable({ rows }: { rows: DeadlineRow[] }) {
+  const detail = useDetail();
   return (
     <Card>
       <CardHeader>
         <CardTitle>Every date that matters</CardTitle>
         <CardDescription>
           Red rows are requests that closed with no Suryatech response on the public record. Amber is owed. Violet is
-          unknown until Discovery.
+          unknown until Discovery. Click a row for the detail.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -50,7 +54,11 @@ export function DeadlineTable({ rows }: { rows: DeadlineRow[] }) {
               {rows.map((row) => {
                 const s = statusStyle[row.status];
                 return (
-                  <TableRow key={row.id}>
+                  <TableRow
+                    key={row.id}
+                    className={cn(detail.has(row.id) && "cursor-pointer")}
+                    onClick={() => detail.has(row.id) && detail.open(row.id)}
+                  >
                     <TableCell className="font-mono text-xs tabular-nums">{row.due ?? "—"}</TableCell>
                     <TableCell className="whitespace-normal font-medium">{row.item}</TableCell>
                     <TableCell className="text-muted-foreground">{row.owner ?? "—"}</TableCell>

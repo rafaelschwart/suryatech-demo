@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
+import { useDetail } from "./item-detail";
 import { type BoardCard, type BoardColumn, type ColumnTone, Kanban } from "./kanban";
 import { ProvenanceBadge } from "./screen-intro";
 
@@ -149,6 +150,7 @@ export function BoardList({
   cards: BoardCard[];
   itemLabel: string;
 }) {
+  const detail = useDetail();
   const order = new Map(columns.map((c, i) => [c.id, i]));
   const rows = [...cards].sort((a, b) => (order.get(a.column) ?? 99) - (order.get(b.column) ?? 99));
   const byId = new Map(columns.map((c) => [c.id, c]));
@@ -168,7 +170,11 @@ export function BoardList({
           {rows.map((r) => {
             const col = byId.get(r.column);
             return (
-              <TableRow key={r.id}>
+              <TableRow
+                key={r.id}
+                className={cn(detail.has(r.id) && "cursor-pointer")}
+                onClick={() => detail.has(r.id) && detail.open(r.id)}
+              >
                 <TableCell>
                   <span className="flex items-center gap-2 text-sm">
                     <span
@@ -198,7 +204,13 @@ export function BoardList({
                 </TableCell>
                 <TableCell className="text-right">
                   {r.href ? (
-                    <Button size="icon-xs" variant="ghost" asChild aria-label={`Open ${r.title}`}>
+                    <Button
+                      size="icon-xs"
+                      variant="ghost"
+                      asChild
+                      aria-label={`Open ${r.title}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <Link prefetch={false} href={r.href}>
                         <ArrowUpRight />
                       </Link>
