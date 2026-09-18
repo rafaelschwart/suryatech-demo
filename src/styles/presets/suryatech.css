@@ -1,0 +1,93 @@
+/*
+label: SuryaTech
+value: suryatech
+*/
+
+/* Suryatech EV Power brand: navy circle, gold bolt. Navy carries the sidebar in both modes,
+   gold is the single accent. Light mode keeps navy as primary; dark mode promotes gold to primary
+   so buttons and active states read on the deep navy ground. */
+
+:root[data-theme-preset="suryatech"] {
+  --radius: 0.5rem;
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.286 0.052 262.1);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.286 0.052 262.1);
+  --primary: oklch(0.281 0.07 260.8);
+  --primary-foreground: oklch(0.985 0.005 258);
+  --secondary: oklch(0.945 0.009 258.3);
+  --secondary-foreground: oklch(0.286 0.052 262.1);
+  --muted: oklch(0.945 0.009 258.3);
+  --muted-foreground: oklch(0.5 0.035 262);
+  --accent: oklch(0.933 0.084 89.6);
+  --accent-foreground: oklch(0.281 0.07 260.8);
+  --destructive: oklch(0.501 0.178 28.7);
+  --border: oklch(0.892 0.016 257.2);
+  --input: oklch(0.892 0.016 257.2);
+  --ring: oklch(0.785 0.164 77.6);
+  --chart-1: oklch(0.785 0.164 77.6);
+  --chart-2: oklch(0.374 0.089 259.1);
+  --chart-3: oklch(0.63 0.101 183);
+  --chart-4: oklch(0.558 0.161 261.7);
+  --chart-5: oklch(0.511 0.091 295.7);
+  --sidebar: oklch(0.222 0.052 263.4);
+  --sidebar-foreground: oklch(0.933 0.013 262.4);
+  --sidebar-primary: oklch(0.785 0.164 77.6);
+  --sidebar-primary-foreground: oklch(0.222 0.052 263.4);
+  --sidebar-accent: oklch(0.374 0.089 259.1);
+  --sidebar-accent-foreground: oklch(0.985 0.005 258);
+  --sidebar-border: oklch(0.325 0.05 262.2);
+  --sidebar-ring: oklch(0.785 0.164 77.6);
+  --background: oklch(0.969 0.005 258.3);
+  --foreground: oklch(0.286 0.052 262.1);
+  --shadow-2xs: 0px 1px 2px 0px hsl(220 40% 10% / 0.04);
+  --shadow-xs: 0px 1px 2px 0px hsl(220 40% 10% / 0.04);
+  --shadow-sm: 0px 1px 3px 0px hsl(220 40% 10% / 0.08), 0px 1px 2px -1px hsl(220 40% 10% / 0.08);
+  --shadow: 0px 1px 3px 0px hsl(220 40% 10% / 0.08), 0px 1px 2px -1px hsl(220 40% 10% / 0.08);
+  --shadow-md: 0px 1px 3px 0px hsl(220 40% 10% / 0.08), 0px 2px 4px -1px hsl(220 40% 10% / 0.08);
+  --shadow-lg: 0px 1px 3px 0px hsl(220 40% 10% / 0.08), 0px 4px 6px -1px hsl(220 40% 10% / 0.08);
+  --shadow-xl: 0px 1px 3px 0px hsl(220 40% 10% / 0.08), 0px 8px 10px -1px hsl(220 40% 10% / 0.08);
+  --shadow-2xl: 0px 1px 3px 0px hsl(220 40% 10% / 0.2);
+}
+
+.dark:root[data-theme-preset="suryatech"] {
+  --background: oklch(0.206 0.038 263.2);
+  --foreground: oklch(0.933 0.013 262.4);
+  --card: oklch(0.253 0.045 261.9);
+  --card-foreground: oklch(0.933 0.013 262.4);
+  --popover: oklch(0.253 0.045 261.9);
+  --popover-foreground: oklch(0.933 0.013 262.4);
+  --primary: oklch(0.785 0.164 77.6);
+  --primary-foreground: oklch(0.206 0.038 263.2);
+  --secondary: oklch(0.325 0.05 262.2);
+  --secondary-foreground: oklch(0.933 0.013 262.4);
+  --muted: oklch(0.325 0.05 262.2);
+  --muted-foreground: oklch(0.723 0.04 262.1);
+  --accent: oklch(0.374 0.089 259.1);
+  --accent-foreground: oklch(0.933 0.013 262.4);
+  --destructive: oklch(0.74 0.126 26.5);
+  --border: oklch(0.325 0.05 262.2);
+  --input: oklch(0.325 0.05 262.2);
+  --ring: oklch(0.785 0.164 77.6);
+  --chart-1: oklch(0.801 0.138 76.5);
+  --chart-2: oklch(0.723 0.04 262.1);
+  --chart-3: oklch(0.72 0.1 183);
+  --chart-4: oklch(0.68 0.14 261.7);
+  --chart-5: oklch(0.65 0.09 295.7);
+  --sidebar: oklch(0.17 0.035 263.4);
+  --sidebar-foreground: oklch(0.933 0.013 262.4);
+  --sidebar-primary: oklch(0.785 0.164 77.6);
+  --sidebar-primary-foreground: oklch(0.206 0.038 263.2);
+  --sidebar-accent: oklch(0.325 0.05 262.2);
+  --sidebar-accent-foreground: oklch(0.933 0.013 262.4);
+  --sidebar-border: oklch(0.325 0.05 262.2);
+  --sidebar-ring: oklch(0.785 0.164 77.6);
+  --shadow-2xs: 0px 1px 2px 0px hsl(220 40% 2% / 0.2);
+  --shadow-xs: 0px 1px 2px 0px hsl(220 40% 2% / 0.2);
+  --shadow-sm: 0px 1px 3px 0px hsl(220 40% 2% / 0.3), 0px 1px 2px -1px hsl(220 40% 2% / 0.3);
+  --shadow: 0px 1px 3px 0px hsl(220 40% 2% / 0.3), 0px 1px 2px -1px hsl(220 40% 2% / 0.3);
+  --shadow-md: 0px 1px 3px 0px hsl(220 40% 2% / 0.3), 0px 2px 4px -1px hsl(220 40% 2% / 0.3);
+  --shadow-lg: 0px 1px 3px 0px hsl(220 40% 2% / 0.3), 0px 4px 6px -1px hsl(220 40% 2% / 0.3);
+  --shadow-xl: 0px 1px 3px 0px hsl(220 40% 2% / 0.3), 0px 8px 10px -1px hsl(220 40% 2% / 0.3);
+  --shadow-2xl: 0px 1px 3px 0px hsl(220 40% 2% / 0.5);
+}

@@ -1,0 +1,54 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+*.sh
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# static export (scripts/export-static.mjs)
+/.export-parked-api/
+
+# local agent tooling, not part of the demo
+/.agents/
+/.claude/
+/skills-lock.json
+
+# render originals kept locally only; the app references the .webp / .glb next to them
+/public/media/charger-cutout.png
+/public/media/energy-flow.png
+/public/media/site-lowell.png
+/public/media/site-municipal.png
+/public/media/site-park.png
+/public/media/charger.glb
+/public/media/charger-cutout.webp
