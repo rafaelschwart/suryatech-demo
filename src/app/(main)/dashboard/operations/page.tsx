@@ -11,6 +11,11 @@ export default function Page() {
       <ScreenIntro
         phase={2}
         eyebrow="Project operations · Locations"
+        illustration={{
+          src: "/media/site-commercial-v2.webp",
+          alt: "A hybrid charger on a commercial forecourt",
+          aspect: "16/9",
+        }}
         flow={{ id: "ops", step: "locate" }}
         title="Every station on the map, one click from its numbers."
         achieves="Every station on the map. Click one to open it."

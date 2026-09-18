@@ -10,6 +10,7 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Answer library"
+        illustration={{ src: "/media/compliance.webp", alt: "Navy folders with gold tabs and a seal", aspect: "16/9" }}
         flow={{ id: "prep", step: "assemble" }}
         title="The parts a response is built from, written once."
         achieves="Company facts and reusable answers, written once."

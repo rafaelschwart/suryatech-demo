@@ -9,6 +9,11 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Package preparation · Response board"
+        illustration={{
+          src: "/media/process-flow.webp",
+          alt: "Five-step process from a public notice to a submitted pack",
+          aspect: "21/9",
+        }}
         title="Where every request and every filing stands."
         achieves="One board for responses, one for filings. Drag a card as the work moves."
         flow={{ id: "prep" }}

@@ -25,6 +25,7 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Deadline board"
+        illustration={{ src: "/media/compliance.webp", alt: "A desk calendar with quarter markers", aspect: "16/9" }}
         flow={{ id: "prep", step: "report" }}
         title={`What is due, and what already went by. ${format(now, "EEEE, MMMM d, yyyy")}.`}
         achieves="Every date Suryatech owes, on one board."

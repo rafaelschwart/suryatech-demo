@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowUpRight, BatteryCharging, Box, Sun, UtilityPole, Zap } from "lucide-react";
@@ -13,6 +14,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+
+const covers: Record<StationSnapshot["siteType"], string> = {
+  commercial: "/media/site-commercial-v2.webp",
+  municipal: "/media/site-municipal-v2.webp",
+  "state-park": "/media/site-park-v2.webp",
+  transit: "/media/site-municipal-v2.webp",
+  "park-and-ride": "/media/site-commercial-v2.webp",
+};
 
 /**
  * The station picked on the map, at a glance. The 3D unit, the consumption curve and the controls
@@ -55,6 +64,18 @@ export function StationPanel({ station }: { station: StationSnapshot | null }) {
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
+        <div className="relative aspect-[16/6] overflow-hidden rounded-lg border bg-muted">
+          <Image
+            src={covers[station.siteType]}
+            alt="Illustrative charging-site setting; not a photograph of this station"
+            fill
+            sizes="(min-width: 1280px) 520px, 100vw"
+            className="object-cover"
+          />
+          <span className="absolute right-2 bottom-2 rounded-sm bg-slate-950/75 px-2 py-1 text-[10px] text-white">
+            Illustrative site · Higgsfield render
+          </span>
+        </div>
         <Button size="lg" asChild className="w-full">
           <Link prefetch={false} href={`/dashboard/stations?station=${station.id}`}>
             <Box data-icon="inline-start" />

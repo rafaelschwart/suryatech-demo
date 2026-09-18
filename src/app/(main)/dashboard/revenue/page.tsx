@@ -9,6 +9,7 @@ export default function Page() {
       <ScreenIntro
         phase={2}
         eyebrow="Project operations · Sessions and revenue"
+        illustration={{ src: "/media/site-park-v2.webp", alt: "A hybrid charger at a state park lot", aspect: "16/9" }}
         flow={{ id: "ops", step: "bill" }}
         title="Cars charged, energy delivered, and what it earned."
         achieves="Cars charged, energy delivered, revenue and uptime, today and over 30 days."

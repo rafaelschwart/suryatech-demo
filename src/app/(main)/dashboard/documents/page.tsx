@@ -16,6 +16,7 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Documents"
+        illustration={{ src: "/media/compliance.webp", alt: "A stack of navy document folders", aspect: "16/9" }}
         flow={{ id: "prep", step: "submit" }}
         title="What the desk puts on paper, stage by stage."
         achieves="One sample document per stage, on SuryaTech letterhead."

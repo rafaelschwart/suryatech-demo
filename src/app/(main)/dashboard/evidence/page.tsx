@@ -15,6 +15,7 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Evidence register"
+        illustration={{ src: "/media/compliance.webp", alt: "A calendar block beside sealed folders", aspect: "16/9" }}
         flow={{ id: "prep", step: "prove" }}
         title="The obligations that outlast any single request, with their documents."
         achieves="Recurring obligations, their cadence, and the document that proves each one."

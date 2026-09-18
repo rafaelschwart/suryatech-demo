@@ -9,6 +9,11 @@ export default function Page() {
       <ScreenIntro
         phase={2}
         eyebrow="Project operations · Work orders"
+        illustration={{
+          src: "/media/site-municipal-v2.webp",
+          alt: "A hybrid charger in a municipal lot",
+          aspect: "16/9",
+        }}
         title="Faults and maintenance, from report to resolution."
         achieves="What the O&M clause of VEH122 (category 4) asks Suryatech to run. Each card opens its station."
         flow={{ id: "ops", step: "maintain" }}

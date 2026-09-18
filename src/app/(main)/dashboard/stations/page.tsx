@@ -11,6 +11,11 @@ export default function Page() {
       <ScreenIntro
         phase={2}
         eyebrow="Project operations · Station detail"
+        illustration={{
+          src: "/media/energy-flow.webp",
+          alt: "Isometric diagram of sun to battery to charger to car",
+          aspect: "16/9",
+        }}
         title="One station: the unit, its power, what it consumed, what it accepts."
         achieves="The 3D unit, how power moves through it, the last 90 minutes, and the commands the management system accepts, every call shown."
         flow={{ id: "ops", step: "inspect" }}

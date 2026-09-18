@@ -120,6 +120,12 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Overview"
+        illustration={{
+          src: "/media/charger-cutout.webp",
+          alt: "SuryaTech hybrid solar and battery charger, cutout",
+          aspect: "16/9",
+          contain: true,
+        }}
         title={format(now, "EEEE, MMMM d, yyyy")}
         achieves="What needs attention, where each half of the business stands, and the next step in every flow."
         provenance={[

@@ -8,6 +8,11 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         eyebrow="Response assembler"
+        illustration={{
+          src: "/media/process-flow.webp",
+          alt: "Seven folder tabs assembled into one binder",
+          aspect: "21/9",
+        }}
         flow={{ id: "prep", step: "assemble" }}
         title="The buyer's required format, filled from what Suryatech already has."
         achieves="The buyer's format, filled from the library. Red items are the real work."
