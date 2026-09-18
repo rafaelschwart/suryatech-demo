@@ -13,7 +13,7 @@ Two halves, each laid out as a process flow. Every screen shows the flow under i
 | Screen | Route | What it achieves |
 |---|---|---|
 | Locations map | `/dashboard/operations` | Seven stations across greater Boston on a Leaflet map; click a marker for status and readings, then Open station |
-| Station detail | `/dashboard/stations?station=ID` | One station: the 3D unit, power distribution, the 90-minute consumption curve, remote commands over the OCPP-style API, every call shown. Switch stations from the header |
+| Station detail | `/dashboard/stations?station=ID` | One station: the 3D unit in two modes (Assembly: concept model with exploded view and parts; Rendered: the Higgsfield image-to-3D unit on a turntable, with a WebGL preflight and the charger loop as fallback), power distribution, the 90-minute consumption curve, remote commands over the OCPP-style API, every call shown. Switch stations from the header |
 | Sessions and revenue | `/dashboard/revenue` | Cars charged, energy delivered, revenue and uptime, today and over 30 days |
 | Work orders | `/dashboard/work-orders` | Kanban of faults and maintenance: Reported, Scheduled, On site, Resolved |
 

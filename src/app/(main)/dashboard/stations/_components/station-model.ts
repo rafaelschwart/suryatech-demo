@@ -23,8 +23,14 @@ export function mountStationModel(
   modelUrl = "/media/charging-station.glb",
 ) {
   const scene = new THREE.Scene();
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true,
+    powerPreference: "high-performance",
+    failIfMajorPerformanceCaveat: false,
+  });
+  // 1.5 keeps 4K and Retina laptops responsive; the model has no detail that needs more.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.setClearColor(0, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.3;
@@ -38,6 +44,8 @@ export function mountStationModel(
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = false;
   controls.enablePan = false;
+  // The wheel scrolls the page until the visitor clicks the model; then it zooms, until the pointer leaves.
+  controls.enableZoom = false;
   controls.minZoom = 0.7;
   controls.maxZoom = 2.5;
   controls.maxPolarAngle = Math.PI / 2 + 0.04;
@@ -211,6 +219,10 @@ export function mountStationModel(
   let down = { x: 0, y: 0 };
   function pointerDown(e: PointerEvent) {
     down = { x: e.clientX, y: e.clientY };
+    controls.enableZoom = true;
+  }
+  function pointerLeave() {
+    controls.enableZoom = false;
   }
   const raycaster = new THREE.Raycaster();
   function pointerUp(e: PointerEvent) {
@@ -227,6 +239,7 @@ export function mountStationModel(
   }
   renderer.domElement.addEventListener("pointerdown", pointerDown);
   renderer.domElement.addEventListener("pointerup", pointerUp);
+  renderer.domElement.addEventListener("pointerleave", pointerLeave);
   setView("iso");
   function disposeScene(root: THREE.Object3D) {
     root.traverse((o) => {
@@ -292,6 +305,7 @@ export function mountStationModel(
       renderer.domElement.removeEventListener("webglcontextlost", onError);
       renderer.domElement.removeEventListener("pointerdown", pointerDown);
       renderer.domElement.removeEventListener("pointerup", pointerUp);
+      renderer.domElement.removeEventListener("pointerleave", pointerLeave);
       disposeScene(scene);
       for (const material of sourceMaterials) material.dispose();
       for (const texture of labelTextures) texture.dispose();
