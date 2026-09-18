@@ -100,9 +100,7 @@ export function OverviewLive({ prepAttention, prepCounts, prepNumbers, upcoming,
       <Card className="border-l-4 border-l-primary">
         <CardHeader>
           <CardTitle>Needs attention</CardTitle>
-          <CardDescription>
-            What moved since yesterday, most urgent first. Each line opens where it is fixed.
-          </CardDescription>
+          <CardDescription>Most urgent first. Each line opens where it is fixed.</CardDescription>
           <CardAction>
             <Badge variant="secondary" className="rounded-sm tabular-nums">
               {stations ? attention.length : "…"}
@@ -142,7 +140,7 @@ export function OverviewLive({ prepAttention, prepCounts, prepNumbers, upcoming,
         <Card>
           <CardHeader>
             <CardTitle>Project operations</CardTitle>
-            <CardDescription>Locate, inspect, control, bill, maintain. Live from the fleet.</CardDescription>
+            <CardDescription>Live from the fleet.</CardDescription>
             <CardAction>
               <Badge variant="outline" className="rounded-sm text-[10px] uppercase tracking-wider">
                 Phase 2
@@ -184,7 +182,7 @@ export function OverviewLive({ prepAttention, prepCounts, prepNumbers, upcoming,
         <Card>
           <CardHeader>
             <CardTitle>Package preparation</CardTitle>
-            <CardDescription>Watch, triage, assemble, prove, export, submit, report.</CardDescription>
+            <CardDescription>Requests, deadlines, the response.</CardDescription>
             <CardAction>
               <Button variant="ghost" size="sm" asChild>
                 <Link prefetch={false} href="/dashboard/board">

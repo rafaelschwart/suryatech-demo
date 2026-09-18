@@ -127,7 +127,7 @@ export default function Page() {
           contain: true,
         }}
         title={format(now, "EEEE, MMMM d, yyyy")}
-        achieves="What needs attention, where each half of the business stands, and the next step in every flow."
+        achieves="What needs attention, and where each half stands."
         provenance={[
           {
             kind: "public",

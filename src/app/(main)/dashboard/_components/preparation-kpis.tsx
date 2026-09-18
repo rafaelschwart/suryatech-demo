@@ -38,7 +38,7 @@ export function PreparationKpis({
         <Kpi
           title="VEH122 requests seen"
           value={String(seen)}
-          sub={`${awarded} awarded to somebody. No Suryatech response on record for any of them.`}
+          sub={`${awarded} awarded to others. None answered.`}
           badge={`${awarded} awarded`}
           tone="warning"
           className="border-b xl:border-r"
@@ -46,7 +46,7 @@ export function PreparationKpis({
         <Kpi
           title="Worth chasing"
           value={String(chase)}
-          sub="Requests the triage rules mark as a fit: remote sites, short RFQs, repeat buyers."
+          sub="Marked as a fit by the triage rules."
           badge="Chase"
           tone="ok"
           className="border-b md:border-r xl:border-b-0"
@@ -54,7 +54,7 @@ export function PreparationKpis({
         <Kpi
           title="Contract runs"
           value={`${years} yrs`}
-          sub="VEH122 ends September 30, 2033. Every response written is reusable until then."
+          sub="VEH122 runs to September 2033."
           badge="To 2033"
           tone="neutral"
         />

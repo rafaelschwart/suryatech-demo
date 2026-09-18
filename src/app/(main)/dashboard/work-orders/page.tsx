@@ -15,7 +15,7 @@ export default function Page() {
           aspect: "16/9",
         }}
         title="Faults and maintenance, from report to resolution."
-        achieves="What the O&M clause of VEH122 (category 4) asks Suryatech to run. Each card opens its station."
+        achieves="Maintenance under VEH122 category 4. Cards open their station."
         flow={{ id: "ops", step: "maintain" }}
         provenance={[
           {
@@ -27,7 +27,7 @@ export default function Page() {
       <Card>
         <CardHeader>
           <CardTitle>Maintenance queue</CardTitle>
-          <CardDescription>Seven stations, six open or recent items. Drag a card as the work moves.</CardDescription>
+          <CardDescription>Drag a card as the work moves.</CardDescription>
         </CardHeader>
         <CardContent>
           <BoardViews

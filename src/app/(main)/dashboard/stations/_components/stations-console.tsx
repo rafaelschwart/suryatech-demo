@@ -191,8 +191,7 @@ export function StationsConsole() {
               <CardHeader>
                 <CardTitle>{selected.name}</CardTitle>
                 <CardDescription>
-                  Last 90 minutes, one point per minute, read from{" "}
-                  <span className="font-mono">/api/stations/{selected.id}/telemetry</span>.
+                  Last 90 minutes, from <span className="font-mono">/api/stations/{selected.id}/telemetry</span>.
                 </CardDescription>
                 <CardAction>
                   <ProvenanceBadge kind="simulated" />
@@ -232,9 +231,8 @@ export function StationsConsole() {
               <CardHeader>
                 <CardTitle id="controls">Controls</CardTitle>
                 <CardDescription>
-                  Each button sends one call to{" "}
-                  <span className="font-mono">POST /api/stations/{selected.id}/commands</span>. Destructive ones ask
-                  first.
+                  One call each to <span className="font-mono">POST /api/stations/{selected.id}/commands</span>.
+                  Destructive ones ask first.
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">

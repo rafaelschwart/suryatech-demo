@@ -14,8 +14,8 @@ export default function Page() {
           aspect: "21/9",
         }}
         flow={{ id: "prep", step: "assemble" }}
-        title="The buyer's required format, filled from what Suryatech already has."
-        achieves="The buyer's format, filled from the library. Red items are the real work."
+        title="The response, in the buyer's format."
+        achieves="Filled from the library. Red items need a person."
         provenance={[
           {
             kind: "public",

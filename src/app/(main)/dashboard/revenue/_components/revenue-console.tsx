@@ -73,10 +73,7 @@ export function RevenueConsole() {
       <Card>
         <CardHeader>
           <CardTitle>Last 30 days</CardTitle>
-          <CardDescription>
-            Revenue per day across the fleet, with the number of cars charged. Weekends lift the park sites and quiet
-            the commuter lots.
-          </CardDescription>
+          <CardDescription>Revenue per day, with cars charged.</CardDescription>
         </CardHeader>
         <CardContent>
           {history ? (
@@ -121,10 +118,7 @@ export function RevenueConsole() {
       <Card>
         <CardHeader>
           <CardTitle>By station</CardTitle>
-          <CardDescription>
-            Revenue is delivered kWh times the site tariff. Tariffs are sample assumptions per site type; Suryatech has
-            not shared its pricing.
-          </CardDescription>
+          <CardDescription>Revenue is kWh times the site tariff. Tariffs are samples.</CardDescription>
         </CardHeader>
         <CardContent>
           {summary ? (

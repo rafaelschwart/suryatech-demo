@@ -17,8 +17,8 @@ export default function Page() {
           aspect: "16/9",
         }}
         flow={{ id: "ops", step: "locate" }}
-        title="Every station on the map, one click from its numbers."
-        achieves="Every station on the map. Click one to open it."
+        title="Every station on the map."
+        achieves="Click a marker to open it."
         provenance={[
           {
             kind: "public",

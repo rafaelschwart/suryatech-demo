@@ -18,8 +18,8 @@ export default function Page() {
         eyebrow="Opportunities"
         illustration={{ src: "/media/watcher.webp", alt: "A radar sweeping a public notice board", aspect: "16/9" }}
         flow={{ id: "prep", step: "watch" }}
-        title="Every VEH122 request, the day it posts, with a verdict."
-        achieves="Every VEH122 request the day it posts, with a Chase, Consider or Pass verdict."
+        title="Every request, with a verdict."
+        achieves="The day it posts: Chase, Consider or Pass."
         provenance={[
           {
             kind: "public",

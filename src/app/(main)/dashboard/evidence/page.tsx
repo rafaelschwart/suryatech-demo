@@ -17,8 +17,8 @@ export default function Page() {
         eyebrow="Evidence register"
         illustration={{ src: "/media/compliance.webp", alt: "A calendar block beside sealed folders", aspect: "16/9" }}
         flow={{ id: "prep", step: "prove" }}
-        title="The obligations that outlast any single request, with their documents."
-        achieves="Recurring obligations, their cadence, and the document that proves each one."
+        title="Obligations and their proof."
+        achieves="What is owed, how often, and the document that proves it."
         provenance={[
           {
             kind: "public",

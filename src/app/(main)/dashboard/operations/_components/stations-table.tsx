@@ -26,10 +26,7 @@ export function StationsTable({ stations, selectedId, onSelect }: StationsTableP
     <Card>
       <CardHeader>
         <CardTitle>All stations</CardTitle>
-        <CardDescription>
-          Status, live output and what each site earned today. Click a row to select it on the map, Open for the station
-          page.
-        </CardDescription>
+        <CardDescription>Click a row to select. Open for the station page.</CardDescription>
       </CardHeader>
       <CardContent>
         {stations ? (

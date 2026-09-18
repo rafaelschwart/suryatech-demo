@@ -96,7 +96,6 @@ export function ScreenIntro({
                 <TooltipContent className="max-w-xs text-xs leading-relaxed">{p.text}</TooltipContent>
               </Tooltip>
             ))}
-            <span className="text-[11px] text-muted-foreground">hover for the source</span>
           </div>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-2">

@@ -25,9 +25,7 @@ export function SdpCalculator({
     <Card>
       <CardHeader>
         <CardTitle>SDP report clock</CardTitle>
-        <CardDescription>
-          Massachusetts fiscal quarters end Sep 30, Dec 31, Mar 31 and Jun 30. The report is due 45 days after each.
-        </CardDescription>
+        <CardDescription>Quarters end Sep 30, Dec 31, Mar 31, Jun 30. Report due 45 days later.</CardDescription>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="rounded-lg border bg-muted/40 p-4">

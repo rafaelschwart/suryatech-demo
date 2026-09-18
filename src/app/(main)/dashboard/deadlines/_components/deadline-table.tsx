@@ -34,8 +34,7 @@ export function DeadlineTable({ rows }: { rows: DeadlineRow[] }) {
       <CardHeader>
         <CardTitle>Every date that matters</CardTitle>
         <CardDescription>
-          Red rows are requests that closed with no Suryatech response on the public record. Amber is owed. Violet is
-          unknown until Discovery. Click a row for the detail.
+          Red closed unanswered. Amber is owed. Violet is unconfirmed. Click a row for detail.
         </CardDescription>
       </CardHeader>
       <CardContent>

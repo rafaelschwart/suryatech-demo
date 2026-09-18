@@ -27,7 +27,7 @@ export default function Page() {
         eyebrow="Deadline board"
         illustration={{ src: "/media/compliance.webp", alt: "A desk calendar with quarter markers", aspect: "16/9" }}
         flow={{ id: "prep", step: "report" }}
-        title={`What is due, and what already went by. ${format(now, "EEEE, MMMM d, yyyy")}.`}
+        title={`Every date that matters. ${format(now, "MMMM d")}.`}
         achieves="Every date Suryatech owes, on one board."
         provenance={[
           {

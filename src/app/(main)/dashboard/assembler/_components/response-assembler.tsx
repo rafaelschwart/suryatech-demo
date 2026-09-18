@@ -32,7 +32,7 @@ export function ResponseAssembler({ tabs }: { tabs: ResponseTab[] }) {
         <CardHeader>
           <CardTitle>MAPC BD-26-1217, non-grid-tied charging and EV carshare</CardTitle>
           <CardDescription>
-            {readyFields} fields filled from public record, {missingFields} still need a person, out of {totalFields}.
+            {readyFields} ready, {missingFields} need a person, {totalFields} total.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">

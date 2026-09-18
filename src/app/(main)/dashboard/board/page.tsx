@@ -15,7 +15,7 @@ export default function Page() {
           aspect: "21/9",
         }}
         title="Where every request and every filing stands."
-        achieves="One board for responses, one for filings. List or board, your pick."
+        achieves="Responses and filings, as a list or a board."
         flow={{ id: "prep" }}
         provenance={[
           {
@@ -31,9 +31,7 @@ export default function Page() {
       <Card>
         <CardHeader>
           <CardTitle>Responses</CardTitle>
-          <CardDescription>
-            From a posting on COMMBUYS to a submitted pack. Closed cards are the public record.
-          </CardDescription>
+          <CardDescription>Posting to submitted pack.</CardDescription>
         </CardHeader>
         <CardContent>
           <BoardViews
@@ -47,9 +45,7 @@ export default function Page() {
       <Card>
         <CardHeader>
           <CardTitle>Filings</CardTitle>
-          <CardDescription>
-            Recurring obligations: SDP quarterly reports, MBE renewal, MassCEC milestones.
-          </CardDescription>
+          <CardDescription>SDP, MBE, MassCEC.</CardDescription>
         </CardHeader>
         <CardContent>
           <BoardViews

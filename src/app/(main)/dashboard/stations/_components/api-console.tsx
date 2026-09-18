@@ -21,9 +21,7 @@ export function ApiConsole({ exchanges }: { exchanges: ApiExchange[] }) {
     <Card className="h-full">
       <CardHeader>
         <CardTitle>API console</CardTitle>
-        <CardDescription>
-          The last command sent, exactly as it went over the wire. Polls are listed below it.
-        </CardDescription>
+        <CardDescription>The last command, as sent. Polls below.</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {latest ? (

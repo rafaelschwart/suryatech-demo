@@ -33,7 +33,7 @@ export function StationPanel({ station }: { station: StationSnapshot | null }) {
       <Card className="h-full">
         <CardHeader>
           <CardTitle>Station</CardTitle>
-          <CardDescription>Select a marker on the map or a row in the table.</CardDescription>
+          <CardDescription>Pick a marker or a row.</CardDescription>
         </CardHeader>
         <CardContent>
           <Skeleton className="h-48 w-full" />

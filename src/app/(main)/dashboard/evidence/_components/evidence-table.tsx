@@ -19,7 +19,7 @@ export function EvidenceTable({ obligations }: { obligations: Obligation[] }) {
     <Card>
       <CardHeader>
         <CardTitle>Obligations</CardTitle>
-        <CardDescription>The SDP row is first because it is the one with a hard public date.</CardDescription>
+        <CardDescription>SDP first: it has a hard date.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">

@@ -42,10 +42,7 @@ export function OpportunitiesTable({ rows }: { rows: OpportunityRow[] }) {
     <Card>
       <CardHeader>
         <CardTitle>Requests on the record</CardTitle>
-        <CardDescription>
-          Sorted by fit. Open a row to read why it got its verdict, then Full detail for its stages, timeline and next
-          steps. The verdict is a recommendation with its reasoning exposed, and any row can be overridden.
-        </CardDescription>
+        <CardDescription>Sorted by fit. Open a row for the reasons, Full detail for the story.</CardDescription>
         <div className="pt-2">
           <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
             <TabsList variant="line">

@@ -59,10 +59,7 @@ export function WatcherStatus() {
     <Card>
       <CardHeader>
         <CardTitle>Watcher</CardTitle>
-        <CardDescription>
-          Reads the COMMBUYS public search on a schedule. Public postings only. Direct quote requests sent to selected
-          vendors land in Suryatech's own COMMBUYS inbox and are never read by this system.
-        </CardDescription>
+        <CardDescription>Runs the COMMBUYS public search daily. Public postings only.</CardDescription>
         <CardAction>
           <Button size="sm" onClick={run} disabled={running}>
             <RefreshCw data-icon="inline-start" className={running ? "animate-spin" : undefined} />

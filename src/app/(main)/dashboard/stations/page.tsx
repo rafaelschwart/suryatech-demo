@@ -16,8 +16,8 @@ export default function Page() {
           alt: "Isometric diagram of sun to battery to charger to car",
           aspect: "16/9",
         }}
-        title="One station: the unit, its power, what it consumed, what it accepts."
-        achieves="The 3D unit, how power moves through it, the last 90 minutes, and the commands the management system accepts, every call shown."
+        title="One station, in full."
+        achieves="The unit in 3D, its power, its last 90 minutes, its commands."
         flow={{ id: "ops", step: "inspect" }}
         provenance={[
           {

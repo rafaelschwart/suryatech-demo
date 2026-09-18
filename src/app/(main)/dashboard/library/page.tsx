@@ -12,7 +12,7 @@ export default function Page() {
         eyebrow="Answer library"
         illustration={{ src: "/media/compliance.webp", alt: "Navy folders with gold tabs and a seal", aspect: "16/9" }}
         flow={{ id: "prep", step: "assemble" }}
-        title="The parts a response is built from, written once."
+        title="Answers, written once."
         achieves="Company facts and reusable answers, written once."
         provenance={[
           { kind: "public", text: "Company constants come from COMMBUYS, LinkedIn and the Lowell filing." },
@@ -25,9 +25,7 @@ export default function Page() {
       <Card>
         <CardHeader>
           <CardTitle>Company constants</CardTitle>
-          <CardDescription>
-            Facts that do not change between responses. They fill Tab 1, Tab 3 and every form.
-          </CardDescription>
+          <CardDescription>Fixed facts. They fill Tab 1, Tab 3 and every form.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">

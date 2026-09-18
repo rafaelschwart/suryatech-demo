@@ -14,8 +14,8 @@ export default function Page() {
           aspect: "21/9",
         }}
         flow={{ id: "prep", step: "export" }}
-        title="The file set the buyer asked for, named the way the buyer names it."
-        achieves="The response folder, named the way the RFP names it. Builds locally, never uploads."
+        title="The pack, named the buyer's way."
+        achieves="Builds locally. Never uploads."
         provenance={[
           { kind: "public", text: "File list and order come from the MAPC RFP, Section 7.2 and Appendix D." },
           {

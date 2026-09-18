@@ -16,9 +16,7 @@ export function AmendmentFeed({ events }: { events: AmendmentEvent[] }) {
     <Card className="h-full">
       <CardHeader>
         <CardTitle>Amendments, MAPC</CardTitle>
-        <CardDescription>
-          Seven changes in six weeks. The evaluation criteria arrived two weeks after the original due date.
-        </CardDescription>
+        <CardDescription>Seven changes in six weeks.</CardDescription>
       </CardHeader>
       <CardContent>
         <ol className="flex flex-col gap-3">
