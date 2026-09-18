@@ -30,7 +30,17 @@ Two halves, each laid out as a process flow. Every screen shows the flow under i
 | Documents | `/dashboard/documents` | Nine sample PDFs, one or more per stage |
 | Deadline board | `/dashboard/deadlines` | Every date Suryatech owes, on one board |
 
-**Landing** (`/dashboard/landing`): a draft of a new suryatechpower.com built from the current site (Firecrawl scrape in the case folder), same navy and gold, stronger hero with the charger loop and a live ticker from the demo fleet. Full-bleed inside the dashboard; nothing is published.
+**Landing** (`/dashboard/landing`): a draft of a new suryatechpower.com. Structure after the LifeLabs solar landing on Dribbble (shot 25384446, scraped with Firecrawl and Apify into the case folder): photo-led hero inside a thin rounded frame, light Outfit headline, pill buttons, three-photo collage, navy benefits band with white icon chips, About card with big stats, sites grid with a side list, a day-in-the-life video row, FAQ, team, footer. Palette, copy and facts are SuryaTech's (current site scraped with Firecrawl). Full-bleed inside the dashboard; nothing is published.
+
+Photo-real imagery generated with Higgsfield `gpt_image_2_5` (quality high, 2k, the charger cutout as image reference, 3 credits each):
+
+| Asset | Job |
+|---|---|
+| `public/media/landing-cabinet.webp` | `5eba51ce-b9de-48f7-8186-53e9e2a4e539` |
+| `public/media/landing-canopy.webp` | `8ea6c68a-e917-4d67-b4f3-84e807ab088e` |
+| `public/media/landing-hero.webp` | `3077e9ac-b333-41a2-8368-b844cc8aae2a` |
+| `public/media/landing-park.webp` | `379fb615-808d-4b4e-bc6f-624562808e1d` |
+
 
 Shared pieces: `src/data/flows.ts` (the two flows), `_components/process-flow.tsx` (animated stepper), `_components/kanban.tsx` (native drag and drop, localStorage), `src/data/boards.ts` (board cards). Only the Lowell station is public record; the other six are illustrative placements on real public lots. Map tiles are Esri light-gray canvas, no key required.
 
