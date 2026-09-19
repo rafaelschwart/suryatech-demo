@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
-import { ArrowDown, ArrowRight, ArrowUpRight, BatteryMedium, Mail, MapPin, Phone, Plus, Sun, Zap } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Mail, MapPin, Phone, Plus } from "lucide-react";
 
+import { EnergyDiagram } from "./energy-diagram";
+import { LandingMotion } from "./landing-motion";
 import { HeroVideo } from "./hero-video";
 import { LandingContact } from "./landing-contact";
-import { LandingNavigation, SystemExplorer } from "./landing-interactions";
+import { LandingNavigation } from "./landing-interactions";
 import styles from "./site-landing.module.css";
 
 const poppins = Poppins({
@@ -45,6 +47,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
   const Content = embedded ? "div" : "main";
   return (
     <div className={`${poppins.variable} ${styles.site}`} data-embedded={embedded}>
+      <LandingMotion />
       <a href="#surya-main" className={styles.skipLink}>
         Skip to content
       </a>
@@ -60,31 +63,39 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
       <Content id="surya-main" tabIndex={-1}>
         <section className={styles.hero} aria-labelledby="surya-heading" id="top">
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>Solar. Storage. EV charging.</p>
+            <p data-hero-item className={styles.eyebrow}>
+              Solar. Storage. EV charging.
+            </p>
             <h1 id="surya-heading">
-              EV charging.
-              <br />
-              With power
-              <br />
-              <span>built in.</span>
+              <span className={styles.heroLine}>
+                <span data-hero-line>EV charging.</span>
+              </span>
+              <span className={styles.heroLine}>
+                <span data-hero-line>With power</span>
+              </span>
+              <span className={styles.heroLine}>
+                <span data-hero-line className={styles.heroAccent}>
+                  built in.
+                </span>
+              </span>
             </h1>
-            <p className={styles.heroDescription}>
+            <p data-hero-item className={styles.heroDescription}>
               Bring solar generation, battery storage and EV charging together. Open up the possibilities for your site.
             </p>
-            <a className={styles.primaryButton} href="#contact">
+            <a data-hero-item className={styles.primaryButton} href="#contact">
               Request a site assessment <ArrowUpRight size={20} />
             </a>
-            <a className={styles.heroSecondary} href="#system">
+            <a data-hero-item className={styles.heroSecondary} href="#system">
               Explore the system <ArrowDown size={16} />
             </a>
           </div>
           <figure className={styles.heroVisual}>
             <Image
-              src="/media/landing-hero-higgsfield-v4-poster.webp"
-              alt="Illustrative SuryaTech solar EV charger with integrated battery storage in a landscaped courtyard"
+              src="/media/landing-hero-higgsfield-v5-poster.webp"
+              alt="Illustrative SuryaTech solar EV charging at a commercial property"
               fill
               preload
-              sizes="(min-width: 800px) 60vw, 100vw"
+              sizes="100vw"
               className={styles.heroImage}
             />
             <HeroVideo />
@@ -119,7 +130,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
         </div>
 
         <section className={`${styles.section} ${styles.system}`} id="system" aria-labelledby="system-heading">
-          <div className={styles.sectionIntro}>
+          <div data-landing-reveal className={styles.sectionIntro}>
             <div>
               <p className={styles.eyebrow}>The SuryaTech approach</p>
               <h2 id="system-heading">
@@ -133,20 +144,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
               delivery into the same conversation.
             </p>
           </div>
-          <SystemExplorer />
-          <div className={styles.energySequence} aria-label="How the system works">
-            <span>
-              <Sun size={22} /> Capture solar energy
-            </span>
-            <ArrowRight aria-hidden="true" size={20} />
-            <span>
-              <BatteryMedium size={22} /> Store it on site
-            </span>
-            <ArrowRight aria-hidden="true" size={20} />
-            <span>
-              <Zap size={22} /> Deliver EV charging
-            </span>
-          </div>
+          <EnergyDiagram />
         </section>
 
         <section
@@ -154,7 +152,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
           id="applications"
           aria-labelledby="applications-heading"
         >
-          <div className={styles.sectionIntro}>
+          <div data-landing-reveal className={styles.sectionIntro}>
             <div>
               <p className={styles.eyebrow}>Places with potential</p>
               <h2 id="applications-heading">
@@ -167,8 +165,8 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
               needs of that place.
             </p>
           </div>
-          <div className={styles.applicationGrid}>
-            <a href="#contact" className={`${styles.application} ${styles.applicationLarge}`}>
+          <div data-landing-reveal className={styles.applicationGrid}>
+            <a href="#contact" data-landing-hover className={`${styles.application} ${styles.applicationLarge}`}>
               <Image
                 src="/media/site-commercial-v2.webp"
                 alt="Illustrative commercial parking area with EV charging equipment"
@@ -190,7 +188,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
               <span className={styles.imageCaption}>Illustrative setting</span>
             </a>
             <div className={styles.applicationStack}>
-              <a href="#contact" className={styles.application}>
+              <a href="#contact" data-landing-hover className={styles.application}>
                 <Image
                   src="/media/site-park-v2.webp"
                   alt="Illustrative charging equipment at a wooded park entrance"
@@ -227,7 +225,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
         </section>
 
         <section className={styles.projectSection} id="approach" aria-labelledby="approach-heading">
-          <div className={styles.projectIntro}>
+          <div data-landing-reveal className={styles.projectIntro}>
             <p className={styles.eyebrow}>From possibility to a plan</p>
             <h2 id="approach-heading">
               The right system
@@ -241,7 +239,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
             </a>
           </div>
           <ol className={styles.projectSteps}>
-            <li>
+            <li data-landing-reveal>
               <span>01</span>
               <div>
                 <h3>Understand the site.</h3>
@@ -249,7 +247,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
                 <small>The starting point: your site's requirements.</small>
               </div>
             </li>
-            <li>
+            <li data-landing-reveal>
               <span>02</span>
               <div>
                 <h3>Define the system.</h3>
@@ -257,7 +255,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
                 <small>The outcome: a scope you can evaluate.</small>
               </div>
             </li>
-            <li>
+            <li data-landing-reveal>
               <span>03</span>
               <div>
                 <h3>Plan the next steps.</h3>
@@ -273,7 +271,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
           id="company"
           aria-labelledby="company-heading"
         >
-          <div className={styles.evidenceIntro}>
+          <div data-landing-reveal className={styles.evidenceIntro}>
             <p className={styles.eyebrow}>Innovation with a purpose</p>
             <h2 id="company-heading">
               A Massachusetts company.
@@ -288,7 +286,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
             </a>
           </div>
           <div className={styles.evidenceList}>
-            <article>
+            <article data-landing-reveal>
               <span className={styles.evidenceLabel}>Product development</span>
               <h3>Supported by InnovateMass.</h3>
               <p>MassCEC announced a $91,000 award to test SuryaTech's hybrid solar EV charger and battery.</p>
@@ -296,7 +294,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
                 Read the MassCEC announcement <ArrowUpRight size={17} />
               </a>
             </article>
-            <article>
+            <article data-landing-reveal>
               <span className={styles.evidenceLabel}>Public purchasing</span>
               <h3>A statewide contract pathway.</h3>
               <p>
@@ -342,7 +340,7 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
         </section>
 
         <section className={styles.contactSection} id="contact" aria-labelledby="contact-heading">
-          <div className={styles.contactIntro}>
+          <div data-landing-reveal className={styles.contactIntro}>
             <p className={styles.eyebrow}>Your site. The next step.</p>
             <h2 id="contact-heading">
               Let's put your

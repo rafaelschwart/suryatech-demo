@@ -31,9 +31,9 @@ The primary action is **Request a site assessment**. The page asks for name, ema
 
 ## Information hierarchy
 
-1. Split hero: direct proposition, site image and assessment action.
+1. Cinematic hero: direct proposition, a four-scene solar charging film and assessment action.
 2. Compact links to the VEH122 guide and MassCEC award announcement.
-3. System explorer: solar generation, battery storage and EV charging, with a labelled concept rendering and optional 3D demonstration.
+3. Energy diagram: original isometric SVG line artwork explains solar generation, battery storage and EV charging, with a finite animated energy path and selectable explanations.
 4. Applications: commercial properties, parks/destinations, municipalities/fleets.
 5. Project approach: understand the site, define the system, plan the next steps.
 6. Company evidence with primary-source links.
@@ -46,7 +46,7 @@ The primary action is **Request a site assessment**. The page asks for name, ema
 - [The VEH122 contract guide](https://www.statewidecontractuserguide.mass.gov/CUG/Guide/VEH122) lists SuryaTech in categories 1 and 4. Buyers must confirm current scope and their purchasing requirements. Listing is not an endorsement or permission to bypass procurement.
 - [The company brochure](https://ne-expo.com/_data/brochures/suryatech.pdf) is a company-overview source.
 - The published contact is Mayur Kamalakar, founder and principal engineer: `mayur.kamalakar@suryatechpower.com`, `+1 (339) 244-9464`.
-- Site images are illustrative concepts; the product render and 3D model are concepts. They are not photographs of completed installations, certified equipment drawings or promised configurations.
+- Site images and the hero film are illustrative concepts; the energy diagram is conceptual. They are not photographs of completed installations, certified equipment drawings or promised configurations.
 - Equipment, capacity, charging rates, grid requirements, civil work, approvals, installation schedule and service arrangements are defined for each project.
 
 Do not invent installation deadlines, trench-free guarantees, cloudy-week autonomy, performance figures, patent ownership, headcounts, collaboration counts, completed sites, customer testimonials, manufacturing origin, guaranteed compliance, telemetry or utility commitments. Never imply an integration with COMMBUYS or write to external state systems. Existing case permission boundaries still apply: no prospect outreach, pricing commitments or sharing with Mayur without Rafa's authorization.

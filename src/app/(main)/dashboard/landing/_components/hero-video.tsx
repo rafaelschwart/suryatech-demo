@@ -5,7 +5,7 @@ import { Pause, Play } from "lucide-react";
 
 import styles from "./site-landing.module.css";
 
-const SOURCE = "/media/landing-hero-higgsfield-v4.mp4";
+const SOURCE = "/media/landing-hero-higgsfield-v5.mp4";
 type DataConnection = {
   saveData?: boolean;
   addEventListener?: (type: string, listener: EventListener) => void;

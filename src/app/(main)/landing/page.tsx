@@ -13,9 +13,9 @@ export const metadata: Metadata = {
     description: "Solar generation, battery storage and EV charging, considered as one system.",
     images: [
       {
-        url: "/media/landing-hero-higgsfield-v3.webp",
+        url: "/media/landing-hero-higgsfield-v5-poster.webp",
         width: 1920,
-        height: 1086,
+        height: 1080,
         alt: "Illustrative SuryaTech solar EV charger with integrated battery storage",
       },
     ],
