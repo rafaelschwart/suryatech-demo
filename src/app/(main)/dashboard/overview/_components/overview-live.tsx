@@ -52,7 +52,7 @@ export function OverviewLive({ prepAttention, prepCounts, prepNumbers, upcoming,
 
   const opsAttention: AttentionItem[] = [];
   for (const s of fleet) {
-    const href = `/dashboard/stations?station=${s.id}`;
+    const href = `/dashboard/operations?station=${s.id}`;
     for (const f of s.faults) {
       opsAttention.push({ id: `${s.id}-${f}`, severity: "critical", title: `${s.name}: fault`, detail: f, href });
     }
@@ -165,7 +165,7 @@ export function OverviewLive({ prepAttention, prepCounts, prepNumbers, upcoming,
                     <Link
                       key={s.id}
                       prefetch={false}
-                      href={`/dashboard/stations?station=${s.id}`}
+                      href={`/dashboard/operations?station=${s.id}`}
                       className="flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs hover:bg-muted/60"
                     >
                       <span aria-hidden="true" className="size-2 rounded-full" style={{ backgroundColor: st.color }} />

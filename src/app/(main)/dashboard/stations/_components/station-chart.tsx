@@ -2,6 +2,8 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
+import { ChartMotion } from "@/app/(main)/dashboard/_components/chart-motion";
+
 import {
   type ChartConfig,
   ChartContainer,
@@ -26,38 +28,40 @@ function hhmm(iso: string) {
 
 export function StationChart({ points }: { points: TelemetryPoint[] }) {
   return (
-    <ChartContainer config={chartConfig} className="aspect-auto h-64 w-full">
-      <AreaChart accessibilityLayer data={points} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
-        <CartesianGrid vertical={false} strokeDasharray="3 3" />
-        <XAxis dataKey="t" tickFormatter={hhmm} tickLine={false} axisLine={false} minTickGap={40} />
-        <YAxis tickLine={false} axisLine={false} width={34} unit=" kW" />
-        <ChartTooltip content={<ChartTooltipContent labelFormatter={(v) => hhmm(String(v))} />} />
-        <ChartLegend content={<ChartLegendContent />} />
-        <Area
-          dataKey="pvKw"
-          type="monotone"
-          fill="var(--color-pvKw)"
-          fillOpacity={0.25}
-          stroke="var(--color-pvKw)"
-          isAnimationActive={false}
-        />
-        <Area
-          dataKey="outputKw"
-          type="monotone"
-          fill="var(--color-outputKw)"
-          fillOpacity={0.15}
-          stroke="var(--color-outputKw)"
-          isAnimationActive={false}
-        />
-        <Area
-          dataKey="gridKw"
-          type="step"
-          fill="var(--color-gridKw)"
-          fillOpacity={0.15}
-          stroke="var(--color-gridKw)"
-          isAnimationActive={false}
-        />
-      </AreaChart>
-    </ChartContainer>
+    <ChartMotion chartKey="station-history">
+      <ChartContainer config={chartConfig} className="aspect-auto h-64 w-full">
+        <AreaChart accessibilityLayer data={points} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+          <XAxis dataKey="t" tickFormatter={hhmm} tickLine={false} axisLine={false} minTickGap={40} />
+          <YAxis tickLine={false} axisLine={false} width={52} unit=" kW" />
+          <ChartTooltip content={<ChartTooltipContent labelFormatter={(v) => hhmm(String(v))} />} />
+          <ChartLegend content={<ChartLegendContent />} />
+          <Area
+            dataKey="pvKw"
+            type="monotone"
+            fill="var(--color-pvKw)"
+            fillOpacity={0.25}
+            stroke="var(--color-pvKw)"
+            isAnimationActive={false}
+          />
+          <Area
+            dataKey="outputKw"
+            type="monotone"
+            fill="var(--color-outputKw)"
+            fillOpacity={0.15}
+            stroke="var(--color-outputKw)"
+            isAnimationActive={false}
+          />
+          <Area
+            dataKey="gridKw"
+            type="step"
+            fill="var(--color-gridKw)"
+            fillOpacity={0.15}
+            stroke="var(--color-gridKw)"
+            isAnimationActive={false}
+          />
+        </AreaChart>
+      </ChartContainer>
+    </ChartMotion>
   );
 }

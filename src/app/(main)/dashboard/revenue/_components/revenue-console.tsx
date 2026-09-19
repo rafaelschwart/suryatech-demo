@@ -9,6 +9,8 @@ import { kwh, siteTypeLabel, usd } from "@/app/(main)/dashboard/_components/oper
 import { ProvenanceBadge } from "@/app/(main)/dashboard/_components/screen-intro";
 import type { FleetHistory, FleetSummary } from "@/app/(main)/dashboard/stations/_components/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartMotion } from "@/app/(main)/dashboard/_components/chart-motion";
+
 import {
   type ChartConfig,
   ChartContainer,
@@ -78,38 +80,44 @@ export function RevenueConsole() {
         </CardHeader>
         <CardContent>
           {history ? (
-            <ChartContainer config={chartConfig} className="aspect-auto h-72 w-full">
-              <ComposedChart accessibilityLayer data={history.series} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
-                <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={md} tickLine={false} axisLine={false} minTickGap={28} />
-                <YAxis
-                  yAxisId="usd"
-                  tickLine={false}
-                  axisLine={false}
-                  width={44}
-                  tickFormatter={(v) => usd(Number(v))}
-                />
-                <YAxis yAxisId="n" orientation="right" tickLine={false} axisLine={false} width={30} />
-                <ChartTooltip content={<ChartTooltipContent labelFormatter={(v) => md(String(v))} />} />
-                <ChartLegend content={<ChartLegendContent />} />
-                <Bar
-                  yAxisId="usd"
-                  dataKey="revenueUsd"
-                  fill="var(--color-revenueUsd)"
-                  radius={[3, 3, 0, 0]}
-                  isAnimationActive={false}
-                />
-                <Line
-                  yAxisId="n"
-                  dataKey="sessions"
-                  type="monotone"
-                  stroke="var(--color-sessions)"
-                  strokeWidth={2}
-                  dot={false}
-                  isAnimationActive={false}
-                />
-              </ComposedChart>
-            </ChartContainer>
+            <ChartMotion chartKey="revenue-history">
+              <ChartContainer config={chartConfig} className="aspect-auto h-72 w-full">
+                <ComposedChart
+                  accessibilityLayer
+                  data={history.series}
+                  margin={{ left: 0, right: 8, top: 8, bottom: 0 }}
+                >
+                  <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                  <XAxis dataKey="date" tickFormatter={md} tickLine={false} axisLine={false} minTickGap={28} />
+                  <YAxis
+                    yAxisId="usd"
+                    tickLine={false}
+                    axisLine={false}
+                    width={44}
+                    tickFormatter={(v) => usd(Number(v))}
+                  />
+                  <YAxis yAxisId="n" orientation="right" tickLine={false} axisLine={false} width={30} />
+                  <ChartTooltip content={<ChartTooltipContent labelFormatter={(v) => md(String(v))} />} />
+                  <ChartLegend content={<ChartLegendContent />} />
+                  <Bar
+                    yAxisId="usd"
+                    dataKey="revenueUsd"
+                    fill="var(--color-revenueUsd)"
+                    radius={[3, 3, 0, 0]}
+                    isAnimationActive={false}
+                  />
+                  <Line
+                    yAxisId="n"
+                    dataKey="sessions"
+                    type="monotone"
+                    stroke="var(--color-sessions)"
+                    strokeWidth={2}
+                    dot={false}
+                    isAnimationActive={false}
+                  />
+                </ComposedChart>
+              </ChartContainer>
+            </ChartMotion>
           ) : (
             <Skeleton className="h-72 w-full" />
           )}

@@ -125,6 +125,6 @@ export const sampleDocuments: SampleDocument[] = [
     file: "/documents/09-station-power-check-report.pdf",
     provenance: "simulated",
     screen: "Stations",
-    screenUrl: "/dashboard/stations",
+    screenUrl: "/dashboard/operations",
   },
 ];

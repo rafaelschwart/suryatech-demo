@@ -43,15 +43,15 @@ export const FLOWS: Record<FlowId, Flow> = {
       {
         id: "inspect",
         label: "Inspect",
-        hint: "The unit in 3D and its consumption",
-        href: "/dashboard/stations",
+        hint: "Station performance and equipment",
+        href: "/dashboard/operations?view=performance#station-details",
         icon: Box,
       },
       {
         id: "control",
         label: "Control",
         hint: "Power checks and remote commands",
-        href: "/dashboard/stations#controls",
+        href: "/dashboard/operations?view=controls#station-details",
         icon: SlidersHorizontal,
       },
       {

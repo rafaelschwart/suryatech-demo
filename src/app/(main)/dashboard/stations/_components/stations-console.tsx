@@ -7,6 +7,11 @@ import { useSearchParams } from "next/navigation";
 import { Activity, Cable, FileDown, Play, Power, RotateCcw, Square, ThermometerSun, type Zap } from "lucide-react";
 import { toast } from "sonner";
 
+import { FleetKpis } from "@/app/(main)/dashboard/_components/operations/fleet-kpis";
+import { StationMap } from "@/app/(main)/dashboard/_components/operations/station-map";
+import { stationStatus } from "@/app/(main)/dashboard/_components/operations/station-status";
+import { StationsTable } from "@/app/(main)/dashboard/operations/_components/stations-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProvenanceBadge } from "@/app/(main)/dashboard/_components/screen-intro";
 import {
   AlertDialog,
@@ -59,7 +64,7 @@ function newId() {
 
 export function StationsConsole() {
   const [stations, setStations] = useState<StationSnapshot[] | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState(false);
   const [points, setPoints] = useState<TelemetryPoint[]>([]);
   const [exchanges, setExchanges] = useState<ApiExchange[]>([]);
   const [lastCommand, setLastCommand] = useState<CommandResponse | null>(null);
@@ -67,7 +72,23 @@ export function StationsConsole() {
   const [audit, setAudit] = useState<string[]>([]);
   const [daylight, setDaylight] = useState(true);
   const consoleRef = useRef<HTMLDivElement>(null);
-  const requested = useSearchParams().get("station");
+  const search = useSearchParams();
+  const requested = search.get("station");
+  const selectedId = stations?.find((station) => station.id === requested)?.id ?? stations?.[0]?.id ?? null;
+  const requestedView = search.get("view");
+  const view = requestedView === "controls" || requestedView === "equipment" ? requestedView : "performance";
+  function selectStation(id: string) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("station", id);
+    window.history.pushState(null, "", url.pathname + url.search + url.hash);
+  }
+  function selectView(next: string) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", next);
+    if (selectedId) url.searchParams.set("station", selectedId);
+    url.hash = "station-details";
+    window.history.pushState(null, "", url.pathname + url.search + url.hash);
+  }
 
   const record = useCallback((e: Omit<ApiExchange, "id" | "at">) => {
     setExchanges((prev) => [{ id: newId(), at: new Date().toISOString(), ...e }, ...prev].slice(0, 40));
@@ -115,13 +136,9 @@ export function StationsConsole() {
     );
     if (list) {
       setStations(list.stations);
-      setSelectedId((cur) => {
-        if (cur) return cur;
-        if (requested && list.stations.some((s) => s.id === requested)) return requested;
-        return list.stations[0]?.id ?? null;
-      });
-    }
-  }, [call, daylight, requested]);
+      setLoadError(false);
+    } else setLoadError(true);
+  }, [call, daylight]);
 
   useEffect(() => {
     void refresh();
@@ -131,6 +148,7 @@ export function StationsConsole() {
 
   useEffect(() => {
     if (!selectedId) return;
+    setPoints([]);
     let cancelled = false;
     const load = async () => {
       const data = await call<{ points: TelemetryPoint[] }>("GET", `/api/stations/${selectedId}/telemetry?minutes=90`);
@@ -166,225 +184,335 @@ export function StationsConsole() {
     if (res.status === "Accepted") toast.success(`${res.command}: accepted`, { description: res.detail });
     else if (res.status === "Scheduled") toast(`${res.command}: scheduled`, { description: res.detail });
     else toast.error(`${res.command}: rejected`, { description: res.detail });
-    consoleRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    consoleRef.current?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "nearest",
+    });
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 flex-col gap-4" data-station-workspace data-selected-station={selectedId}>
+      <FleetKpis stations={stations} />
+      {loadError && (
+        <div
+          role="alert"
+          className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm"
+        >
+          <span>
+            Station readings are unavailable.{" "}
+            {stations ? "Showing the last received readings." : "Try loading the fleet again."}
+          </span>
+          <Button variant="outline" size="sm" onClick={() => void refresh()}>
+            Retry readings
+          </Button>
+        </div>
+      )}
       <StationHeader
         stations={stations}
         selected={selected}
-        onSelect={setSelectedId}
+        onSelect={selectStation}
         daylight={daylight}
         onDaylight={setDaylight}
       />
-      {selected ? (
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-          <div className="xl:col-span-5">
-            <StationStage station={selected} daylight={daylight} />
-          </div>
-          <div className="xl:col-span-7">
-            <EnergyFlow station={selected} />
-          </div>
-          <div className="flex flex-col gap-4 xl:col-span-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>{selected.name}</CardTitle>
-                <CardDescription>
-                  Last 90 minutes, from <span className="font-mono">/api/stations/{selected.id}/telemetry</span>.
-                </CardDescription>
-                <CardAction>
-                  <ProvenanceBadge kind="simulated" />
-                </CardAction>
-              </CardHeader>
-              <CardContent>
-                {points.length ? <StationChart points={points} /> : <Skeleton className="h-64 w-full" />}
-                <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <Reading
-                    label="Battery"
-                    value={`${selected.batterySoc.toFixed(0)}%`}
-                    sub={`${selected.batteryKw >= 0 ? "charging" : "discharging"} ${Math.abs(selected.batteryKw).toFixed(1)} kW`}
-                  >
-                    <Progress value={selected.batterySoc} className="mt-2 h-1.5" />
-                  </Reading>
-                  <Reading
-                    label="Solar"
-                    value={`${selected.pvKw.toFixed(1)} kW`}
-                    sub={`of ${selected.pvCapacityKw} kW installed`}
-                  />
-                  <Reading
-                    label="Grid import"
-                    value={`${selected.gridKw.toFixed(1)} kW`}
-                    sub={selected.gridKw > 0 ? "battery below reserve" : "self-sufficient"}
-                  />
-                  <Reading
-                    label="Enclosure"
-                    value={`${selected.enclosureTempC.toFixed(0)} °C`}
-                    sub={`${selected.energyTodayKwh} kWh today`}
-                    icon={ThermometerSun}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle id="controls">Controls</CardTitle>
-                <CardDescription>
-                  One call each to <span className="font-mono">POST /api/stations/{selected.id}/commands</span>.
-                  Destructive ones ask first.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-4">
-                <div className="flex flex-wrap gap-2">
-                  <Button onClick={() => send({ command: "PowerCheck" })} disabled={busy !== null || !selected.online}>
-                    <Activity
-                      data-icon="inline-start"
-                      className={busy === "PowerCheck" ? "animate-pulse" : undefined}
-                    />
-                    Run power check
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => send({ command: "RemoteStartTransaction", connectorId: 1 })}
-                    disabled={busy !== null || !selected.online}
-                  >
-                    <Play data-icon="inline-start" />
-                    Start session, connector 1
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => send({ command: "RemoteStopTransaction", connectorId: 1 })}
-                    disabled={busy !== null || !selected.online}
-                  >
-                    <Square data-icon="inline-start" />
-                    Stop session, connector 1
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() =>
-                      send({
-                        command: "ChangeAvailability",
-                        type: selected.availability === "Operative" ? "Inoperative" : "Operative",
-                      })
-                    }
-                    disabled={busy !== null || !selected.online}
-                  >
-                    <Power data-icon="inline-start" />
-                    {selected.availability === "Operative" ? "Take out of service" : "Return to service"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => send({ command: "GetDiagnostics" })}
-                    disabled={busy !== null || !selected.online}
-                  >
-                    <FileDown data-icon="inline-start" />
-                    Pull diagnostics
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="destructive" disabled={busy !== null || !selected.online}>
-                        <RotateCcw data-icon="inline-start" />
-                        Soft reset
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Reset {selected.name}?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          The station reboots and drops off the network for about 15 seconds. Any running session ends.
-                          This is logged against your user.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => send({ command: "Reset", type: "Soft" })}>
-                          Reset
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-
-                {lastCommand?.report ? <PowerCheckResult report={lastCommand.report} /> : null}
-
-                <div>
-                  <p className="mb-1 font-medium text-muted-foreground text-xs uppercase tracking-wider">
-                    Command audit
-                  </p>
-                  {audit.length ? (
-                    <ul className="flex flex-col gap-1 font-mono text-xs">
-                      {audit.map((a) => (
-                        <li key={a}>{a}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-muted-foreground text-xs">No commands sent this session.</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="flex flex-col gap-4 xl:col-span-4" ref={consoleRef}>
-            <ApiConsole exchanges={exchanges} />
-            <Card>
-              <CardHeader>
-                <CardTitle>Connectors</CardTitle>
-                <CardDescription>
-                  {selected.ocppVersion} · firmware {selected.firmware} · heartbeat{" "}
-                  {new Date(selected.lastHeartbeat).toLocaleTimeString()}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader className="bg-muted/50">
-                    <TableRow>
-                      <TableHead>Connector</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Output</TableHead>
-                      <TableHead className="text-right">Session</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {selected.connectors.map((c) => (
-                      <TableRow key={c.id}>
-                        <TableCell>
-                          <span className="flex items-center gap-1.5">
-                            <Cable className="size-4 text-muted-foreground" />
-                            {c.id} · {c.type} · {c.maxKw} kW
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant="secondary"
-                            className={cn("rounded-sm px-1.5 py-0.5", connectorStyle[c.status])}
-                          >
-                            {c.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right tabular-nums">{c.outputKw.toFixed(1)} kW</TableCell>
-                        <TableCell className="text-right text-muted-foreground tabular-nums">
-                          {c.sessionKwh === null ? "—" : `${c.sessionKwh.toFixed(1)} kWh`}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                {selected.faults.length ? (
-                  <ul className="mt-3 flex flex-col gap-1 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-xs">
-                    {selected.faults.map((f) => (
-                      <li key={f} className="text-destructive">
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+      {stations?.length === 0 ? (
+        <p className="rounded-lg border p-6 text-sm text-muted-foreground">No stations are available in this fleet.</p>
       ) : null}
+      <div id="station-map" className="grid min-w-0 scroll-mt-20 grid-cols-1 gap-4 xl:grid-cols-12">
+        <section aria-label="Fleet locations" className="flex min-w-0 flex-col gap-3 xl:col-span-5">
+          <div className="h-[340px] min-w-0 overflow-hidden rounded-xl border bg-card p-1 sm:h-[440px] xl:h-full xl:min-h-[420px]">
+            {stations?.length ? (
+              <StationMap stations={stations} selectedId={selectedId} onSelect={selectStation} />
+            ) : (
+              <Skeleton className="h-full w-full" />
+            )}
+          </div>
+          <ul
+            aria-label="Station status legend"
+            className="flex flex-wrap gap-x-4 gap-y-2 px-1 text-xs text-muted-foreground"
+          >
+            {Array.from(
+              new Map(
+                (stations ?? []).map((station) => {
+                  const status = stationStatus(station);
+                  return [status.key, status] as const;
+                }),
+              ).values(),
+            ).map((status) => (
+              <li key={status.key} className="flex items-center gap-1.5">
+                <span aria-hidden="true" className="size-2 rounded-full" style={{ backgroundColor: status.color }} />
+                {status.label}
+              </li>
+            ))}
+          </ul>
+        </section>
+        <div className="min-w-0 xl:col-span-7">
+          <EnergyFlow station={selected} />
+        </div>
+      </div>
+      {selected && (
+        <section id="station-details" className="min-w-0 scroll-mt-20" aria-labelledby="selected-station-heading">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+            <div>
+              <h2 id="selected-station-heading" className="text-lg font-medium">
+                {selected.name}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">{selected.site}</p>
+            </div>
+            <span className="text-xs font-mono text-muted-foreground">{selected.id}</span>
+          </div>
+          <Tabs value={view} onValueChange={selectView} className="min-w-0 gap-4">
+            <TabsList aria-label="Station views" className="h-11 w-full sm:w-fit">
+              <TabsTrigger
+                value="performance"
+                className="min-h-10 px-3 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+              >
+                Performance
+              </TabsTrigger>
+              <TabsTrigger
+                value="equipment"
+                className="min-h-10 px-3 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+              >
+                Equipment
+              </TabsTrigger>
+              <TabsTrigger
+                value="controls"
+                className="min-h-10 px-3 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+              >
+                Controls
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="performance" className="min-w-0">
+              <div className="grid min-w-0 grid-cols-1 gap-4 2xl:grid-cols-12">
+                <div className="min-w-0 2xl:col-span-8">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Power over the last 90 minutes</CardTitle>
+                      <CardDescription>
+                        Solar generation, vehicle output and grid import for this station.
+                      </CardDescription>
+                      <CardAction>
+                        <ProvenanceBadge kind="simulated" />
+                      </CardAction>
+                    </CardHeader>
+                    <CardContent>
+                      {points.length ? (
+                        <StationChart key={selected.id} points={points} />
+                      ) : (
+                        <Skeleton className="h-64 w-full" />
+                      )}
+                      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                        <Reading
+                          label="Battery"
+                          value={`${selected.batterySoc.toFixed(0)}%`}
+                          sub={`${selected.batteryKw >= 0 ? "charging" : "discharging"} ${Math.abs(selected.batteryKw).toFixed(1)} kW`}
+                        >
+                          <Progress value={selected.batterySoc} className="mt-2 h-1.5" />
+                        </Reading>
+                        <Reading
+                          label="Solar"
+                          value={`${selected.pvKw.toFixed(1)} kW`}
+                          sub={`of ${selected.pvCapacityKw} kW installed`}
+                        />
+                        <Reading
+                          label="Grid import"
+                          value={`${selected.gridKw.toFixed(1)} kW`}
+                          sub={selected.gridKw > 0 ? "battery below reserve" : "self-sufficient"}
+                        />
+                        <Reading
+                          label="Enclosure"
+                          value={`${selected.enclosureTempC.toFixed(0)} °C`}
+                          sub={`${selected.energyTodayKwh} kWh today`}
+                          icon={ThermometerSun}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="min-w-0 2xl:col-span-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Connectors</CardTitle>
+                      <CardDescription>
+                        {selected.ocppVersion} · firmware {selected.firmware} · heartbeat{" "}
+                        {new Date(selected.lastHeartbeat).toLocaleTimeString()}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader className="bg-muted/50">
+                          <TableRow>
+                            <TableHead>Connector</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Output</TableHead>
+                            <TableHead className="text-right">Session</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {selected.connectors.map((c) => (
+                            <TableRow key={c.id}>
+                              <TableCell>
+                                <span className="flex items-center gap-1.5">
+                                  <Cable className="size-4 text-muted-foreground" />
+                                  {c.id} · {c.type} · {c.maxKw} kW
+                                </span>
+                              </TableCell>
+                              <TableCell>
+                                <Badge
+                                  variant="secondary"
+                                  className={cn("rounded-sm px-1.5 py-0.5", connectorStyle[c.status])}
+                                >
+                                  {c.status}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="text-right tabular-nums">{c.outputKw.toFixed(1)} kW</TableCell>
+                              <TableCell className="text-right text-muted-foreground tabular-nums">
+                                {c.sessionKwh === null ? "—" : `${c.sessionKwh.toFixed(1)} kWh`}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                      {selected.faults.length ? (
+                        <ul className="mt-3 flex flex-col gap-1 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-xs">
+                          {selected.faults.map((f) => (
+                            <li key={f} className="text-destructive">
+                              {f}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="equipment" className="min-w-0">
+              <StationStage station={selected} daylight={daylight} />
+            </TabsContent>
+            <TabsContent value="controls" className="min-w-0">
+              <div className="grid min-w-0 grid-cols-1 gap-4 2xl:grid-cols-12">
+                <div className="min-w-0 2xl:col-span-7">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle id="controls">Controls</CardTitle>
+                      <CardDescription>Simulated station commands. A reset requires confirmation.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-4">
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          onClick={() => send({ command: "PowerCheck" })}
+                          disabled={busy !== null || !selected.online}
+                        >
+                          <Activity
+                            data-icon="inline-start"
+                            className={busy === "PowerCheck" ? "animate-pulse" : undefined}
+                          />
+                          Run power check
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => send({ command: "RemoteStartTransaction", connectorId: 1 })}
+                          disabled={busy !== null || !selected.online}
+                        >
+                          <Play data-icon="inline-start" />
+                          Start session, connector 1
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => send({ command: "RemoteStopTransaction", connectorId: 1 })}
+                          disabled={busy !== null || !selected.online}
+                        >
+                          <Square data-icon="inline-start" />
+                          Stop session, connector 1
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            send({
+                              command: "ChangeAvailability",
+                              type: selected.availability === "Operative" ? "Inoperative" : "Operative",
+                            })
+                          }
+                          disabled={busy !== null || !selected.online}
+                        >
+                          <Power data-icon="inline-start" />
+                          {selected.availability === "Operative" ? "Take out of service" : "Return to service"}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => send({ command: "GetDiagnostics" })}
+                          disabled={busy !== null || !selected.online}
+                        >
+                          <FileDown data-icon="inline-start" />
+                          Pull diagnostics
+                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="destructive" disabled={busy !== null || !selected.online}>
+                              <RotateCcw data-icon="inline-start" />
+                              Soft reset
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Reset {selected.name}?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                The station reboots and drops off the network for about 15 seconds. Any running session
+                                ends. This is logged against your user.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => send({ command: "Reset", type: "Soft" })}>
+                                Reset
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+
+                      {lastCommand?.stationId === selected.id && lastCommand.report ? (
+                        <PowerCheckResult report={lastCommand.report} />
+                      ) : null}
+
+                      <div>
+                        <p className="mb-1 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+                          Command audit
+                        </p>
+                        {audit.some((entry) => entry.includes(selected.id)) ? (
+                          <ul className="flex flex-col gap-1 font-mono text-xs">
+                            {audit
+                              .filter((entry) => entry.includes(selected.id))
+                              .map((a) => (
+                                <li key={a}>{a}</li>
+                              ))}
+                          </ul>
+                        ) : (
+                          <p className="text-muted-foreground text-xs">No commands sent this session.</p>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div ref={consoleRef} className="min-w-0 2xl:col-span-5">
+                  <ApiConsole exchanges={exchanges.filter((exchange) => exchange.path.includes(selected.id))} />
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </section>
+      )}
+      <StationsTable
+        stations={stations}
+        selectedId={selectedId}
+        onSelect={(id) => {
+          selectStation(id);
+          document.getElementById("station-map")?.scrollIntoView({
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+            block: "start",
+          });
+        }}
+      />
     </div>
   );
 }

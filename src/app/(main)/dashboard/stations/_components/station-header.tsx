@@ -1,13 +1,8 @@
 "use client";
 
-import Link from "next/link";
-
-import { ArrowLeft } from "lucide-react";
-
 import { kwh, siteTypeLabel, stationStatus, usd } from "@/app/(main)/dashboard/_components/operations/station-status";
 import { ProvenanceBadge } from "@/app/(main)/dashboard/_components/screen-intro";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -24,21 +19,15 @@ interface StationHeaderProps {
   onDaylight: (on: boolean) => void;
 }
 
-/** Which station this page is about, how it is doing, and the way back to the map. */
+/** Which station this page is about, how it is doing, and the simulation clock. */
 export function StationHeader({ stations, selected, onSelect, daylight, onDaylight }: StationHeaderProps) {
   const st = selected ? stationStatus(selected) : null;
   return (
     <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 text-card-foreground lg:flex-row lg:items-center lg:justify-between">
       <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
-        <Button variant="ghost" size="sm" asChild className="w-fit">
-          <Link prefetch={false} href="/dashboard/operations">
-            <ArrowLeft data-icon="inline-start" />
-            Map
-          </Link>
-        </Button>
         {stations ? (
           <Select value={selected?.id} onValueChange={onSelect}>
-            <SelectTrigger className="w-full sm:w-80">
+            <SelectTrigger aria-label="Select station" className="w-full sm:w-80">
               <SelectValue placeholder="Choose a station" />
             </SelectTrigger>
             <SelectContent>
@@ -54,7 +43,7 @@ export function StationHeader({ stations, selected, onSelect, daylight, onDaylig
             </SelectContent>
           </Select>
         ) : (
-          <Skeleton className="h-9 w-80" />
+          <Skeleton className="h-9 w-full sm:w-80" />
         )}
         {selected && st ? (
           <div className="flex min-w-0 flex-wrap items-center gap-1.5">

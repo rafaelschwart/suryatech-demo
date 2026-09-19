@@ -1,6 +1,5 @@
 import {
   BookOpen,
-  Box,
   CalendarClock,
   CircleDollarSign,
   FileCheck2,
@@ -72,8 +71,7 @@ export const sidebarItems: NavGroup[] = [
     id: 2,
     label: "Project operations",
     items: [
-      { id: "operations", title: "Locations map", url: "/dashboard/operations", icon: MapPin, badge: "phase 2" },
-      { id: "stations", title: "Station detail", url: "/dashboard/stations", icon: Box, badge: "phase 2" },
+      { id: "operations", title: "Stations & map", url: "/dashboard/operations", icon: MapPin, badge: "phase 2" },
       {
         id: "revenue",
         title: "Sessions and revenue",

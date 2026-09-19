@@ -12,6 +12,7 @@ Suryatech EV Power LLC develops hybrid solar-powered EV charging with battery st
 
 - `/landing`: standalone, full-width website preview. This is the primary route for reviewing the brand experience.
 - `/dashboard/landing`: the same page inside the Response Desk, with a link to the standalone preview.
+- `/dashboard/operations`: the unified Stations & map workspace; selection is shared by the map, telemetry, equipment and controls. The old `/dashboard/stations` route redirects here while retaining station and controls context.
 - Other dashboard routes: demonstration of opportunity preparation and station operations. Simulated station readings, workflows and site scenarios are not evidence of shipped SuryaTech product capabilities.
 
 The preview does not replace `suryatechpower.com`. Preview metadata requests no indexing. Public demo hosting and sharing the preview with the prospect are separate actions.

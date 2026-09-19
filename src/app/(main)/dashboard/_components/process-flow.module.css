@@ -1,0 +1,126 @@
+.flow {
+  container-type: inline-size;
+  min-width: 0;
+  width: 100%;
+}
+.list {
+  display: grid;
+  grid-template-columns: repeat(var(--flow-count), minmax(0, 1fr));
+  margin: 0;
+  padding: 12px 14px;
+}
+.step {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: 5px;
+  text-align: center;
+}
+.label {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.hint {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+}
+.count {
+  margin-top: 6px;
+  max-width: 100%;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--primary);
+  background: color-mix(in oklch, var(--primary) 8%, transparent);
+}
+.list[data-size="large"] .label {
+  font-size: 14px;
+}
+@container (max-width: 560px) {
+  .list {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 12px 14px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    column-gap: 14px;
+    text-align: left;
+    min-height: 70px;
+    padding: 0 0 20px;
+  }
+  .step:last-child {
+    padding-bottom: 0;
+    min-height: 52px;
+  }
+  .step > a {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    justify-self: center;
+  }
+  .label {
+    grid-column: 2;
+    margin-top: 0;
+  }
+  .hint,
+  .count {
+    grid-column: 2;
+  }
+  .step .rail {
+    top: 30px;
+    left: 24px;
+    height: 100%;
+    width: 4px;
+    transform: none;
+  }
+  .step .rail::after {
+    width: 100%;
+    height: calc(100% + 22px);
+    background: repeating-linear-gradient(180deg, var(--primary) 0 10px, transparent 10px 22px);
+    animation-name: flow-down;
+  }
+}
+@keyframes flow-down {
+  from {
+    transform: translateY(-22px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .step .rail::after {
+    animation: none;
+  }
+}
+
+.copy {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+@container (max-width: 560px) {
+  .step > a {
+    grid-row: 1;
+  }
+  .copy {
+    grid-column: 2;
+    align-items: flex-start;
+  }
+  .step .rail::after {
+    background: repeating-linear-gradient(180deg, var(--chart-1) 0 10px, transparent 10px 22px);
+  }
+}

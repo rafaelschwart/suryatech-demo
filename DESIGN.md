@@ -71,3 +71,7 @@ Use dark navy text on gold buttons. For the exact hexadecimal brand pair, contra
 `site-landing.tsx` remains the primarily server-rendered page composition. Navigation, the SVG energy diagram, Anime.js page motion, hero playback and contact preparation are focused client components. Keep landing CSS scoped. Reuse installed libraries and existing assets; avoid unnecessary dependencies and preserve `src/components/ui/`, calendar components, dashboard functionality and static-export compatibility.
 
 Preview metadata remains `noindex`. Form behavior does not introduce data storage or automatic outbound messages. Source, privacy and prospect-sharing boundaries in `PRODUCT.md` continue to apply.
+
+## Dashboard operations
+
+The operations dashboard retains its existing theme and shared shadcn components. One Stations & map workspace combines location, selected-station readings, Performance, Equipment and Controls views. Selection and view are URL state. The process stepper uses generous internal padding for its focus/active outlines and a vertical layout below 560px of available width. Revenue bars, revenue/session lines and station telemetry areas use scoped Anime.js entrances; axes and labels remain stationary. Reduced motion presents complete plots, and offscreen plots finish without persistent animation work.

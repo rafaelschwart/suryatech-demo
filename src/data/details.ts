@@ -343,11 +343,11 @@ function workOrderDetails(): ItemDetail[] {
       ],
       timeline,
       next: [
-        { label: "Open the station", hint: "3D unit, consumption, controls", href: w.href ?? "/dashboard/stations" },
+        { label: "Open the station", hint: "3D unit, consumption, controls", href: w.href ?? "/dashboard/operations" },
         {
           label: "Run a power check",
           hint: "Compares every reading to a threshold",
-          href: w.href ?? "/dashboard/stations",
+          href: w.href ?? "/dashboard/operations",
         },
       ],
       docs: doc("powercheck"),

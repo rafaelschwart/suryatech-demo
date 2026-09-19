@@ -108,7 +108,7 @@ export const workOrderCards: BoardCard[] = [
     badge: "Fault",
     badgeTone: "critical",
     provenance: "simulated",
-    href: "/dashboard/stations?station=ST-SAMPLE-03",
+    href: "/dashboard/operations?station=ST-SAMPLE-03",
   },
   {
     id: "wo-blue-hills-soc",
@@ -119,7 +119,7 @@ export const workOrderCards: BoardCard[] = [
     badge: "Warning",
     badgeTone: "warning",
     provenance: "simulated",
-    href: "/dashboard/stations?station=ST-SAMPLE-03",
+    href: "/dashboard/operations?station=ST-SAMPLE-03",
   },
   {
     id: "wo-blue-hills-firmware",
@@ -128,7 +128,7 @@ export const workOrderCards: BoardCard[] = [
     subtitle: "Remote update window booked for the next low-sun morning.",
     meta: "ST-SAMPLE-03 · 2026-09-19",
     provenance: "simulated",
-    href: "/dashboard/stations?station=ST-SAMPLE-03",
+    href: "/dashboard/operations?station=ST-SAMPLE-03",
   },
   {
     id: "wo-somerville-panel",
@@ -139,7 +139,7 @@ export const workOrderCards: BoardCard[] = [
     badge: "Out of service",
     badgeTone: "warning",
     provenance: "simulated",
-    href: "/dashboard/stations?station=ST-SAMPLE-06",
+    href: "/dashboard/operations?station=ST-SAMPLE-06",
   },
   {
     id: "wo-lynn-cable",
@@ -148,7 +148,7 @@ export const workOrderCards: BoardCard[] = [
     subtitle: "Wear reported by a driver. Replace on the next coastal route visit.",
     meta: "ST-SAMPLE-07 · 2026-09-23",
     provenance: "simulated",
-    href: "/dashboard/stations?station=ST-SAMPLE-07",
+    href: "/dashboard/operations?station=ST-SAMPLE-07",
   },
   {
     id: "wo-lowell-quarterly",
@@ -159,7 +159,7 @@ export const workOrderCards: BoardCard[] = [
     badge: "Closed",
     badgeTone: "ok",
     provenance: "simulated",
-    href: "/dashboard/stations?station=ST-LOWELL-01",
+    href: "/dashboard/operations?station=ST-LOWELL-01",
   },
   {
     id: "wo-alewife-reset",
@@ -170,6 +170,6 @@ export const workOrderCards: BoardCard[] = [
     badge: "Closed",
     badgeTone: "ok",
     provenance: "simulated",
-    href: "/dashboard/stations?station=ST-SAMPLE-04",
+    href: "/dashboard/operations?station=ST-SAMPLE-04",
   },
 ];

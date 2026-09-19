@@ -10,15 +10,15 @@ export default function Page() {
     <div className="flex flex-col gap-4">
       <ScreenIntro
         phase={2}
-        eyebrow="Project operations · Locations"
+        eyebrow="Project operations · Stations & map"
         illustration={{
           src: "/media/site-commercial-v2.webp",
           alt: "A hybrid charger on a commercial forecourt",
           aspect: "16/9",
         }}
         flow={{ id: "ops", step: "locate" }}
-        title="Every station on the map."
-        achieves="Click a marker to open it."
+        title="Find a station. See the whole picture."
+        achieves="Select a marker or station to inspect its power, performance, equipment and controls in one place."
         provenance={[
           {
             kind: "public",

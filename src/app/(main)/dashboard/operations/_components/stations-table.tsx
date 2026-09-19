@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import { ArrowUpRight } from "lucide-react";
 
 import { siteTypeLabel, stationStatus, usd } from "@/app/(main)/dashboard/_components/operations/station-status";
@@ -26,7 +24,7 @@ export function StationsTable({ stations, selectedId, onSelect }: StationsTableP
     <Card>
       <CardHeader>
         <CardTitle>All stations</CardTitle>
-        <CardDescription>Click a row to select. Open for the station page.</CardDescription>
+        <CardDescription>Select a station to update the map, performance and controls above.</CardDescription>
       </CardHeader>
       <CardContent>
         {stations ? (
@@ -43,7 +41,6 @@ export function StationsTable({ stations, selectedId, onSelect }: StationsTableP
                   <TableHead className="text-right">Cars today</TableHead>
                   <TableHead className="text-right">Revenue today</TableHead>
                   <TableHead className="text-right">Uptime 30d</TableHead>
-                  <TableHead className="w-24" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -65,7 +62,19 @@ export function StationsTable({ stations, selectedId, onSelect }: StationsTableP
                             style={{ backgroundColor: st.color }}
                           />
                           <div className="min-w-0">
-                            <div className="font-medium">{s.name}</div>
+                            <Button
+                              variant="link"
+                              className="h-auto max-w-full justify-start whitespace-normal p-0 text-left font-medium"
+                              aria-label={"Inspect " + s.name}
+                              aria-pressed={selected}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                onSelect(s.id);
+                              }}
+                            >
+                              {s.name}
+                              <ArrowUpRight className="size-3 shrink-0" />
+                            </Button>
                             <div className="font-mono text-muted-foreground text-xs">{s.id}</div>
                           </div>
                         </div>
@@ -89,14 +98,6 @@ export function StationsTable({ stations, selectedId, onSelect }: StationsTableP
                       <TableCell className="text-right tabular-nums">{s.sessionsToday}</TableCell>
                       <TableCell className="text-right tabular-nums">{usd(s.revenueTodayUsd, true)}</TableCell>
                       <TableCell className="text-right tabular-nums">{s.uptime30dPct.toFixed(1)}%</TableCell>
-                      <TableCell className="text-right">
-                        <Button size="xs" variant="outline" asChild onClick={(e) => e.stopPropagation()}>
-                          <Link prefetch={false} href={`/dashboard/stations?station=${s.id}`}>
-                            Open
-                            <ArrowUpRight data-icon="inline-end" />
-                          </Link>
-                        </Button>
-                      </TableCell>
                     </TableRow>
                   );
                 })}

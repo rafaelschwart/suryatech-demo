@@ -50,12 +50,15 @@ export function StationMap({ stations, selectedId, onSelect, className, compact 
   const layer = useRef<LayerGroup | null>(null);
   const markers = useRef<Map<string, Marker>>(new Map());
   const fitted = useRef(false);
+  const markerContent = useRef(new Map<string, string>());
   const onSelectRef = useRef(onSelect);
+  const selectedIdRef = useRef(selectedId);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     onSelectRef.current = onSelect;
-  }, [onSelect]);
+    selectedIdRef.current = selectedId;
+  }, [onSelect, selectedId]);
 
   useEffect(() => {
     const el = host.current;
@@ -77,7 +80,13 @@ export function StationMap({ stations, selectedId, onSelect, className, compact 
       map.current = m;
       setReady(true);
     });
-    const ro = new ResizeObserver(() => map.current?.invalidateSize());
+    const ro = new ResizeObserver(() => {
+      const currentMap = map.current;
+      if (!currentMap) return;
+      currentMap.invalidateSize();
+      const marker = selectedIdRef.current ? markers.current.get(selectedIdRef.current) : null;
+      if (marker) currentMap.panInside(marker.getLatLng(), { padding: [48, 48], animate: false });
+    });
     ro.observe(el);
     return () => {
       cancelled = true;
@@ -86,6 +95,7 @@ export function StationMap({ stations, selectedId, onSelect, className, compact 
       map.current = null;
       layer.current = null;
       markers.current.clear();
+      markerContent.current.clear();
       fitted.current = false;
       setReady(false);
     };
@@ -100,9 +110,10 @@ export function StationMap({ stations, selectedId, onSelect, className, compact 
     for (const s of stations) {
       seen.add(s.id);
       const selected = s.id === selectedId;
+      const html = markerHtml(s, selected);
       const icon = L.divIcon({
         className: "st-marker-wrap",
-        html: markerHtml(s, selected),
+        html,
         iconSize: [36, 36],
         iconAnchor: [18, 18],
       });
@@ -113,15 +124,19 @@ export function StationMap({ stations, selectedId, onSelect, className, compact 
         mk.on("click", () => onSelectRef.current?.(s.id));
         markers.current.set(s.id, mk);
       } else {
-        mk.setIcon(icon);
+        if (markerContent.current.get(s.id) !== html) mk.setIcon(icon);
         mk.setLatLng([s.lat, s.lng]);
       }
+      markerContent.current.set(s.id, html);
+      mk.getElement()?.setAttribute("aria-label", `Select ${s.name}`);
+      mk.getElement()?.setAttribute("aria-pressed", String(selected));
       mk.setZIndexOffset(selected ? 1000 : 0);
     }
     for (const [id, mk] of markers.current) {
       if (!seen.has(id)) {
         mk.remove();
         markers.current.delete(id);
+        markerContent.current.delete(id);
       }
     }
     if (!fitted.current && stations.length) {
@@ -130,6 +145,15 @@ export function StationMap({ stations, selectedId, onSelect, className, compact 
       fitted.current = true;
     }
   }, [stations, selectedId, ready, compact]);
+
+  useEffect(() => {
+    const marker = selectedId ? markers.current.get(selectedId) : null;
+    if (!ready || !marker) return;
+    map.current?.panInside(marker.getLatLng(), {
+      padding: [48, 48],
+      animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    });
+  }, [selectedId, ready]);
 
   return (
     <div
