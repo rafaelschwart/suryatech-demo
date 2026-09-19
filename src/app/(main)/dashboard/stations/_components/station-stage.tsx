@@ -292,13 +292,13 @@ export function StationStage({ station }: { station: StationSnapshot | null; day
                 ) : null}
               </div>
             ) : null}
-            ready ? (
-            <p className="pointer-events-none absolute right-3 bottom-2 left-3 text-center text-[10px] text-muted-foreground">
-              {state.exploded
-                ? "Exploded assembly · illustrative internal layout"
-                : "Drag to orbit · click, then scroll to zoom · select a component"}
-            </p>
-            ) : null
+            {ready ? (
+              <p className="pointer-events-none absolute right-3 bottom-2 left-3 text-center text-[10px] text-muted-foreground">
+                {state.exploded
+                  ? "Exploded assembly · illustrative internal layout"
+                  : "Drag to orbit · click, then scroll to zoom · select a component"}
+              </p>
+            ) : null}
           </>
         ) : (
           <div className="absolute inset-0">

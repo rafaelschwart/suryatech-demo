@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { DetailProvider } from "@/app/(main)/dashboard/_components/item-detail";
+import { PageMotion } from "@/app/(main)/dashboard/_components/motion";
 import { AppSidebar } from "@/app/(main)/dashboard/_components/sidebar/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -66,7 +67,9 @@ export default function Layout({ children }: Readonly<{ children: ReactNode }>) 
         </header>
         {/* Pages can set data-content-padding="false" to render full-bleed app layouts. */}
         <div className="min-h-0 min-w-0 flex-1 overflow-x-hidden p-4 has-data-[content-padding=false]:p-0 md:p-6 md:has-data-[content-padding=false]:p-0">
-          <DetailProvider>{children}</DetailProvider>
+          <DetailProvider>
+            <PageMotion>{children}</PageMotion>
+          </DetailProvider>
         </div>
       </SidebarInset>
     </SidebarProvider>

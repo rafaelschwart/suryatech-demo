@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { AlertTriangle, ArrowUpRight, CircleAlert, Info } from "lucide-react";
 
+import { AnimatedNumber } from "@/app/(main)/dashboard/_components/motion";
 import { stationStatus, usd } from "@/app/(main)/dashboard/_components/operations/station-status";
 import { useFleet } from "@/app/(main)/dashboard/_components/operations/use-fleet";
 import { ProcessFlow } from "@/app/(main)/dashboard/_components/process-flow";
@@ -288,7 +289,7 @@ function Figure({
             tone === "critical" && "text-destructive",
           )}
         >
-          {value}
+          <AnimatedNumber value={value} />
         </div>
       )}
     </div>

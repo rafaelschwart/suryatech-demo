@@ -1,3 +1,4 @@
+import { AnimatedNumber } from "@/app/(main)/dashboard/_components/motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -85,7 +86,9 @@ function Kpi({
       </CardHeader>
       <CardContent className="flex items-end justify-between gap-3">
         <div className="space-y-1">
-          <div className="text-3xl tabular-nums leading-none tracking-tight">{value}</div>
+          <div className="text-3xl tabular-nums leading-none tracking-tight">
+            <AnimatedNumber value={value} />
+          </div>
           <p className="text-muted-foreground text-xs">{sub}</p>
         </div>
         <Badge

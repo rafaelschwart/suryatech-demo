@@ -20,6 +20,7 @@ import {
   Sun,
 } from "lucide-react";
 
+import { AnimatedNumber, RevealWords, useScrollReveal } from "@/app/(main)/dashboard/_components/motion";
 import { useFleet } from "@/app/(main)/dashboard/_components/operations/use-fleet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useMediaAvailable } from "@/hooks/use-media-available";
@@ -36,7 +37,9 @@ const display = { fontFamily: "var(--font-outfit), var(--font-geist), sans-serif
 const NAVY = "#14284B";
 const INK = "#0E1A33";
 const GOLD = "#F2A900";
-const PAPER = "#F3F4F3";
+const PAPER = "#f6f5f1";
+const SAND = "#f1ebe3";
+const HERO_VIDEO = "/media/landing-hero.mp4";
 
 const NAV = [
   ["#why", "Why SuryaTech"],
@@ -140,6 +143,8 @@ export function SiteLanding() {
   const { stations } = useFleet(4000);
   const lowell = stations?.find((s) => s.id === "ST-LOWELL-01") ?? null;
   const hasHero = useMediaAvailable(HERO);
+  const hasHeroVideo = useMediaAvailable(HERO_VIDEO);
+  useScrollReveal();
   const hasCollage = [useMediaAvailable(COLLAGE[0]), useMediaAvailable(COLLAGE[1]), useMediaAvailable(COLLAGE[2])];
   const [site, setSite] = useState<(typeof SITES)[number]["id"]>("municipal");
   const active = SITES.find((s) => s.id === site) ?? SITES[1];
@@ -187,6 +192,18 @@ export function SiteLanding() {
               className="object-cover"
             />
           )}
+          {hasHeroVideo ? (
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              src={HERO_VIDEO}
+              poster={HERO}
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-label="Golden-hour view of a SuryaTech charger in a town hall lot"
+            />
+          ) : null}
           <div
             aria-hidden="true"
             className="absolute inset-0"
@@ -229,8 +246,7 @@ export function SiteLanding() {
                   className="max-w-[22ch] font-light text-[2.5rem] leading-[1.12] sm:text-5xl lg:text-[3.6rem]"
                   style={display}
                 >
-                  Charging that brings its own power. From the first site visit to the first session, one cabinet and
-                  one team.
+                  <RevealWords text="Charging that brings its own power. From the first site visit to the first session, one cabinet and one team." />
                 </h1>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link
@@ -294,7 +310,7 @@ export function SiteLanding() {
       </section>
 
       {/* Benefits band */}
-      <section id="why" className="px-3 md:px-4">
+      <section id="why" data-reveal className="px-3 md:px-4">
         <ul
           className="grid grid-cols-1 gap-px overflow-hidden rounded-[28px] text-white sm:grid-cols-2 lg:grid-cols-4"
           style={{ backgroundColor: NAVY }}
@@ -328,9 +344,9 @@ export function SiteLanding() {
       </section>
 
       {/* About card with stats */}
-      <section id="about" className="px-3 py-10 md:px-4 md:py-14">
-        <div className="rounded-[28px] bg-white px-8 py-10 md:px-14 md:py-14">
-          <div className="grid grid-cols-3 text-sm">
+      <section id="about" data-reveal className="px-3 py-10 md:px-4 md:py-14">
+        <div className="rounded-[28px] border border-black/10 bg-white px-8 py-10 md:px-14 md:py-14">
+          <div className="grid grid-cols-3 text-[#5b5b5b] text-xs">
             <span>About</span>
             <span className="text-center">SuryaTech</span>
             <span className="text-right text-slate-500">Massachusetts, 2026</span>
@@ -356,7 +372,7 @@ export function SiteLanding() {
                   <dt className="sr-only">{unit}</dt>
                   <dd>
                     <span className="text-5xl tabular-nums tracking-tight" style={display}>
-                      {n}
+                      <AnimatedNumber value={n} />
                     </span>
                     <span className="ml-1 text-sm text-slate-600">{unit}</span>
                     <p className="mt-2 max-w-[22ch] text-slate-600 text-sm">{cap}</p>
@@ -376,9 +392,9 @@ export function SiteLanding() {
       </section>
 
       {/* Sites: side list + photo grid, one text tile */}
-      <section id="sites" className="px-3 pb-10 md:px-4 md:pb-14">
-        <div className="rounded-[28px] bg-white px-8 py-10 md:px-14 md:py-14">
-          <div className="flex items-center justify-between text-sm">
+      <section id="sites" data-reveal className="px-3 pb-10 md:px-4 md:pb-14">
+        <div className="rounded-[28px] border border-black/10 bg-white px-8 py-10 md:px-14 md:py-14">
+          <div className="flex items-center justify-between text-[#5b5b5b] text-xs">
             <span>Where it goes</span>
             <Link
               prefetch={false}
@@ -443,8 +459,8 @@ export function SiteLanding() {
       </section>
 
       {/* A day: video left, statements right */}
-      <section id="day" className="px-3 pb-10 md:px-4 md:pb-14">
-        <div className="grid grid-cols-1 gap-8 overflow-hidden rounded-[28px] bg-white lg:grid-cols-12">
+      <section id="day" data-reveal className="px-3 pb-10 md:px-4 md:pb-14">
+        <div className="grid grid-cols-1 gap-8 overflow-hidden rounded-[28px] border border-black/10 bg-white lg:grid-cols-12">
           <div className="relative aspect-video lg:col-span-7 lg:aspect-auto lg:min-h-[480px]">
             <video
               className="absolute inset-0 h-full w-full object-cover"
@@ -476,8 +492,8 @@ export function SiteLanding() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="px-3 pb-10 md:px-4 md:pb-14">
-        <div className="rounded-[28px] bg-white px-8 py-10 md:px-14 md:py-14">
+      <section id="faq" data-reveal className="px-3 pb-10 md:px-4 md:pb-14">
+        <div className="rounded-[28px] border border-black/10 bg-white px-8 py-10 md:px-14 md:py-14">
           <h2
             className="mx-auto max-w-[30ch] text-center font-light text-3xl leading-tight sm:text-4xl"
             style={display}
@@ -496,8 +512,11 @@ export function SiteLanding() {
       </section>
 
       {/* Team */}
-      <section id="team" className="px-3 pb-10 md:px-4 md:pb-14">
-        <div className="grid grid-cols-1 gap-10 rounded-[28px] bg-white px-8 py-10 md:px-14 md:py-14 lg:grid-cols-12">
+      <section id="team" data-reveal className="px-3 pb-10 md:px-4 md:pb-14">
+        <div
+          className="grid grid-cols-1 gap-10 rounded-[28px] border border-black/10 px-8 py-10 md:px-14 md:py-14 lg:grid-cols-12"
+          style={{ backgroundColor: SAND }}
+        >
           <div className="lg:col-span-5">
             <h2 className="font-light text-3xl leading-tight sm:text-4xl" style={display}>
               Six people, one unit.

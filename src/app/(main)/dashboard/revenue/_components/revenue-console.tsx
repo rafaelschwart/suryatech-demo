@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts";
 
+import { AnimatedNumber } from "@/app/(main)/dashboard/_components/motion";
 import { kwh, siteTypeLabel, usd } from "@/app/(main)/dashboard/_components/operations/station-status";
 import { ProvenanceBadge } from "@/app/(main)/dashboard/_components/screen-intro";
 import type { FleetHistory, FleetSummary } from "@/app/(main)/dashboard/stations/_components/types";
@@ -203,7 +204,7 @@ function Kpi({
             tone === "warning" && "text-amber-700 dark:text-amber-300",
           )}
         >
-          {value}
+          <AnimatedNumber value={value} />
         </div>
       )}
     </div>

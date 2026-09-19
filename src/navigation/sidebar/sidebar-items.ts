@@ -60,6 +60,11 @@ export interface NavGroup {
  */
 export const sidebarItems: NavGroup[] = [
   {
+    id: 0,
+    label: "Landing",
+    items: [{ id: "landing", title: "Landing page", url: "/dashboard/landing", icon: Globe, badge: "new" }],
+  },
+  {
     id: 1,
     items: [{ id: "overview", title: "Overview", url: "/dashboard/overview", icon: LayoutDashboard }],
   },
@@ -92,10 +97,5 @@ export const sidebarItems: NavGroup[] = [
       { id: "documents", title: "Documents", url: "/dashboard/documents", icon: Files },
       { id: "deadlines", title: "Deadline board", url: "/dashboard/deadlines", icon: CalendarClock },
     ],
-  },
-  {
-    id: 4,
-    label: "Landing",
-    items: [{ id: "landing", title: "Landing page", url: "/dashboard/landing", icon: Globe, badge: "new" }],
   },
 ];

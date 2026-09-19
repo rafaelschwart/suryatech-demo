@@ -32,6 +32,14 @@ Two halves, each laid out as a process flow. Every screen shows the flow under i
 
 **Landing** (`/dashboard/landing`): a draft of a new suryatechpower.com. Structure after the LifeLabs solar landing on Dribbble (shot 25384446, scraped with Firecrawl and Apify into the case folder): photo-led hero inside a thin rounded frame, light Outfit headline, pill buttons, three-photo collage, navy benefits band with white icon chips, About card with big stats, sites grid with a side list, a day-in-the-life video row, FAQ, team, footer. Palette, copy and facts are SuryaTech's (current site scraped with Firecrawl). Full-bleed inside the dashboard; nothing is published.
 
+Hero video: Seedance 2.5 image-to-video from the hero still (job `71c3b0b9-7f9e-4c07-87ee-8573e33dd343`, 10 s, 1080p, no audio, about 90 credits), `public/media/landing-hero.mp4`, played behind the hero with the still as poster.
+
+Motion (anime.js 4, `_components/motion.tsx`): one staggered entrance of the page blocks on every route change, counted numbers on KPI tiles, word-by-word headline and scroll reveals on the landing. All of it respects `prefers-reduced-motion`. The 21st.dev catalog was searched for counter and reveal patterns; the components are native, no paid code.
+
+3D model: the gold bolt primitive of the concept model is hidden and the SuryaTech wordmark (`public/media/suryatech-logo-light.png`, a light-on-dark cut of the logo from suryatechpower.com) is placed on the cabinet's front panel at runtime (`station-model.ts`).
+
+Landing tokens follow the Framer set you shared, in SuryaTech's palette: paper `#f6f5f1`, sand `#f1ebe3`, ink `#1f2a2e`, hairline borders at 10% black, navy and gold as the only accents.
+
 Photo-real imagery generated with Higgsfield `gpt_image_2_5` (quality high, 2k, the charger cutout as image reference, 3 credits each):
 
 | Asset | Job |

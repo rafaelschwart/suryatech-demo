@@ -286,6 +286,74 @@ export function mountStationModel(
       }
     }
     host.dataset.loaded = "true";
+    // The SuryaTech wordmark on the cabinet, in place of the lightning emblem the model ships with.
+    // The emblem is the gold primitive of the enclosure mesh (material Anodized_gold).
+    let brand: THREE.Mesh | null = null;
+    model.getObjectByName("enclosure")?.traverse((o) => {
+      if (brand || !(o instanceof THREE.Mesh) || Array.isArray(o.material)) return;
+      if (o.material.name === "Anodized_gold") brand = o;
+    });
+    if (brand) {
+      const emblem = brand as THREE.Mesh;
+      model.updateMatrixWorld(true);
+      const box = new THREE.Box3().setFromObject(emblem, true);
+      const size = new THREE.Vector3();
+      const center = new THREE.Vector3();
+      box.getSize(size);
+      box.getCenter(center);
+      const axis: "x" | "y" | "z" = size.x <= size.y && size.x <= size.z ? "x" : size.z <= size.y ? "z" : "y";
+      const sign = Math.sign(camera.position[axis] - center[axis]) || 1;
+      const faceWidth = axis === "x" ? size.z : size.x;
+      const width = Math.max(faceWidth, 0.16) * 1.45;
+      const height = width * (202 / 1032);
+      void faceWidth;
+      const texture = new THREE.TextureLoader().load("/media/suryatech-logo-light.png", invalidate);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = 8;
+      labelTextures.push(texture);
+      // The emblem is recessed into the panel: put the wordmark on the panel's own outer face.
+      const panel = new THREE.Box3();
+      let panelFound = false;
+      model.getObjectByName("enclosure")?.traverse((o) => {
+        if (o instanceof THREE.Mesh && !Array.isArray(o.material) && o.material.name === "Powder_coat_Navy") {
+          panel.union(new THREE.Box3().setFromObject(o, true));
+          panelFound = true;
+        }
+      });
+      const face = panelFound ? (sign > 0 ? panel.max[axis] : panel.min[axis]) : center[axis] + sign * (size[axis] / 2);
+      const world = center.clone();
+      world[axis] = face + sign * 0.006;
+      const panelWidth = panelFound ? (axis === "x" ? panel.max.z - panel.min.z : panel.max.x - panel.min.x) : 0;
+      const decalWidth = panelWidth ? panelWidth * 0.72 : width;
+      const decalHeight = decalWidth * (202 / 1032);
+      const decal = new THREE.Mesh(
+        new THREE.PlaneGeometry(decalWidth, decalHeight),
+        new THREE.MeshBasicMaterial({
+          map: texture,
+          transparent: true,
+          depthWrite: false,
+          toneMapped: false,
+          side: THREE.DoubleSide,
+        }),
+      );
+      const holder = emblem.parent ?? model;
+      holder.add(decal);
+      decal.position.copy(holder.worldToLocal(world.clone()));
+      // Orient in world space: the holder carries its own rotation, so a local Euler would lie flat.
+      const outward = new THREE.Vector3();
+      outward[axis] = sign;
+      decal.lookAt(world.clone().add(outward));
+      emblem.visible = false;
+      host.dataset.decal = JSON.stringify({
+        axis,
+        sign,
+        size: [size.x, size.y, size.z].map((v) => Number(v.toFixed(3))),
+        center: [center.x, center.y, center.z].map((v) => Number(v.toFixed(3))),
+        local: [decal.position.x, decal.position.y, decal.position.z].map((v) => Number(v.toFixed(3))),
+        holder: holder.name,
+        face: Number(face.toFixed(3)),
+      });
+    }
     update(state);
   });
   return {

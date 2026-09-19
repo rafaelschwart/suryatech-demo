@@ -2,6 +2,7 @@
 
 import { Activity, Car, CircleDollarSign, type LucideIcon, RadioTower, Sun, Zap } from "lucide-react";
 
+import { AnimatedNumber } from "@/app/(main)/dashboard/_components/motion";
 import type { StationSnapshot } from "@/app/(main)/dashboard/stations/_components/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -72,7 +73,7 @@ function Kpi({
             tone === "critical" && "text-destructive",
           )}
         >
-          {value}
+          <AnimatedNumber value={value} />
         </div>
       )}
     </div>
