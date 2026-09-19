@@ -1,35 +1,70 @@
-# Design system, landing surface (revised 2026-09-18 after growmodo.com)
+# SuryaTech landing design system
 
-## Color strategy: Restrained on paper, committed ink bands
+Updated 2026-09-18. Applies to `/landing` and `/dashboard/landing`.
 
-Paper surfaces carry the page; navy ink carries the problem band and the footer; gold is the only signal (drawings, active steps, one label). No pure black or white as surfaces.
+## Direction
 
-- paper: #f5f3ec · paper-soft: #faf8f2 · paper-2: #edeae0 · paper-3: #e2dfd5
-- ink: #0e1a33 · ink-2: #16213b · ink-mute: #4b5468 · ink-fade: #8a8f9c
-- signal: #F2A900 · signal-deep: #c98c00 · beacon: #14284B
-- rule: rgb(14 26 51 / 0.10) · rule-strong: rgb(14 26 51 / 0.22)
+A grounded, image-led industrial website in SuryaTech navy and gold. Use a split hero with clear copy on navy and an illustrative product scene alongside it. Subsequent sections alternate light surfaces, large application imagery and a navy project-planning section. Strong hierarchy and useful content provide the character.
+
+This replaces the previous Growmodo-inspired specification. Mono eyebrows, figure-sheet borders, corner crosshairs, dotted drawing backgrounds and oversized decorative wordmarks are not design requirements.
+
+## Color and logos
+
+Use the actual logo assets at `/media/suryatech-logo.png` and `/media/suryatech-logo-light.png`, preserving their proportions. Define colors once in the scoped CSS module, then reference semantic variables.
+
+| Token | Value | Use |
+|---|---|---|
+| `--st-navy` | `oklch(28.079% 0.06971 260.772)`; brand `#14284B` | Hero, project band, primary text |
+| `--st-gold` | `oklch(78.489% 0.16385 77.582)`; brand `#F2A900` | Primary CTA, selected accents, municipal application |
+| `--st-navy-deep` | `oklch(22% 0.058 260)` | Footer, text on gold, stronger hover states |
+| `--st-paper` | `oklch(98.7% 0.003 255)` | Main light surface and light text |
+| `--st-surface` | `oklch(96.1% 0.005 255)` | Secondary sections and product stage |
+| `--st-muted` | `oklch(47% 0.025 260)` | Secondary text on light surfaces |
+| `--st-line` | `oklch(87% 0.014 260)` | Decorative separators and grouping |
+| `--st-control-line` | `oklch(62% 0.025 260)` | Visible form-control boundaries |
+| `--st-light-muted` | `oklch(83% 0.021 255)` | Supporting copy on navy |
+
+Use dark navy text on gold buttons. For the exact hexadecimal brand pair, contrast is approximately 7.28:1; white on gold is only 2.01:1. Avoid small gold text on light surfaces. Focus indicators use navy on light surfaces and gold within navy regions.
 
 ## Typography
 
-- Display and body: Geist. Display weight 500, tracking -0.02em. Body 400, 1rem / 1.55.
-- Labels: JetBrains Mono, 0.6875rem, tracking 0.06em, uppercase. Used for eyebrows, captions, figure notes, drawing labels, roles.
-- Scale: display-xxl clamp(2.75rem, 7vw, 6.75rem) / 0.98; display-xl clamp(2.25rem, 4.5vw, 3.75rem) / 1.08; h2 2rem / 1.12; lead 1.375rem / 1.32; small 0.875rem / 1.5.
+- Display: Poppins, primarily weight 600, loaded through `next/font` with swap behavior. Use short headings with deliberate line breaks and balanced wrapping.
+- Body: the existing Public Sans family, 16px baseline with approximately 1.65 line height.
+- Headings use responsive scales and tight tracking; body text keeps comfortable measure and natural spacing.
+- Eyebrows use the body family in small uppercase with restrained tracking. No extra mono family.
+- Mobile body copy and form inputs remain readable; labels, captions and secondary metadata are subordinate without disappearing.
 
-## Layout
+## Composition and spacing
 
-- Container 1320px, padding 64px at desktop, 20px at phone.
-- Section padding 80 to 128px. Every section starts on a hairline rule. Eyebrow with a 10px square mark above each headline.
-- Radius 4px on controls, 6 to 8px on panels. Corner crosshairs on drawing panels.
-- Sequences are numbered 01 to 04 with a signal rule over the completed steps.
+- The landing is a scoped CSS-module surface rather than a new global dashboard theme.
+- Container queries respond to the available landing width, including the narrower dashboard preview. The standalone route is the primary full-width presentation.
+- Responsive gutters range from approximately 24px to 80px. Major desktop sections use approximately 76–116px vertical spacing; smaller layouts tighten the rhythm.
+- Desktop hero is an approximately 47/53 copy/image split. Mobile stacks copy and image, retaining the proposition and assessment CTA before secondary content.
+- Applications use one dominant photograph beside a smaller photograph and gold text panel. Do not normalize every section into identical cards.
+- Product tabs sit beside a contained concept render. Source-backed proof uses concise linked articles instead of animated counters.
+- Borders clarify component grouping. Mostly square controls and panels suit the industrial identity; do not add pill controls, glass effects or gradient typography.
 
-## Drawings
+## Imagery and product explanation
 
-- Technical drawings, not renders: isometric line work, white faces, hairline ink strokes, mono labels on the objects, dotted sheet, FIG. and SHEET captions. One signal color for flows and leaders. Reduced motion stops the dashed flow.
+- Hero: `/media/landing-hero-higgsfield-v3.webp`, generated through Higgsfield product photoshoot using the existing charger cutout as a reference. Restrained daylight, navy cabinet, brushed metal and a single docked charging cable in a quiet architectural courtyard. Keep the complete canopy and base visible.
+- Applications: `/media/site-commercial-v2.webp` and `/media/site-park-v2.webp`.
+- System: `/media/charging-station-poster.png`, labelled as a concept rendering. Link to the existing interactive 3D concept instead of loading a second WebGL scene into the landing.
+- Every illustrative site image has visible provenance and descriptive alternative text. Do not caption a concept as a completed customer installation.
+- Reserve image dimensions/aspect ratios, prioritize the hero, and lazy-load lower imagery. Image crops should keep equipment recognizable at each breakpoint.
+- The landing uses a static hero. Existing cinematic videos remain available in the project but do not drive the redesigned page.
 
-## Motion
+## Interaction and accessibility
 
-- One hero sequence on load, sections reveal once on scroll with a safety timer. Ease-out quart. No layout properties animated.
+- Navigation includes a working mobile menu, an announced expanded state and Escape-to-close with focus restored to the toggle. Close the menu after choosing a destination.
+- Provide a skip link, visible focus indicators, logical landmarks and a single page h1. Sticky navigation must not obscure anchor headings or focused controls.
+- System tabs use tablist/tab/tabpanel semantics, selected states, arrow-key navigation and Home/End support. Selection updates the explanatory panel and render annotation.
+- FAQs use native `details` and `summary` so disclosure behavior remains simple and keyboard accessible.
+- The assessment form has explicit labels, native validation and clear required-field instructions. Its action is “Prepare assessment email”; explain that nothing is sent automatically. Announce the prepared state and retain a retry link.
+- Prefer comfortable 44px or larger touch targets. Do not rely on hover alone or color alone for interactive meaning.
+- Reduced motion disables entrance/hover movement and transitions. Important content is server-rendered and visible without scroll-triggered JavaScript.
 
-## Bans
+## Implementation boundaries
 
-Side-stripe borders, gradient text, glass cards, hero metric templates, identical icon-card grids, modals, em dashes, renders where a drawing is meant.
+`site-landing.tsx` remains the primarily server-rendered page composition. Navigation, system tabs and contact preparation are small client components. Keep landing CSS scoped. Reuse installed libraries and existing assets; avoid unnecessary dependencies and preserve `src/components/ui/`, calendar components, dashboard functionality and static-export compatibility.
+
+Preview metadata remains `noindex`. Form behavior does not introduce data storage or automatic outbound messages. Source, privacy and prospect-sharing boundaries in `PRODUCT.md` continue to apply.

@@ -1,39 +1,58 @@
-# SuryaTech Response Desk and landing
+# SuryaTech website preview and Response Desk
 
-register: brand (the landing at /dashboard/landing) inside a product (the dashboard)
+Updated 2026-09-18.
 
-## Product purpose
+register: brand
 
-Suryatech EV Power LLC builds a hybrid EV charger: a solar canopy, a battery bay and DC fast charging in one cabinet, for lots where the grid is thin. The company is a vendor on the Massachusetts statewide contract VEH122 (categories 1 and 4). The dashboard is Arqentia's demo of an operating desk for that business: catching VEH122 requests, assembling responses, proving compliance, and running stations. The landing is a draft of a new suryatechpower.com, reviewed inside the dashboard, not published.
+Scene: a facilities director compares charging options on a laptop in a daylight office, looking for an understandable system and a credible person to contact. Light reading surfaces and strong navy product sections suit that task.
 
-## Users
+## Purpose and routes
 
-- Mayur Kamalakar, founder and principal engineer, the champion and the buyer. Reviews on a laptop, often between site visits.
-- Public buyers in Massachusetts: town facilities directors, DCR and MassDOT project managers, MBTA fleet staff. They read on a 27-inch monitor in a daylight office and decide whether to ask for a quote.
-- Rafa (Arqentia), who reviews everything before anything reaches Mayur.
+Suryatech EV Power LLC develops hybrid solar-powered EV charging with battery storage. The landing helps a site owner understand that approach and begin a site-assessment conversation. It is a proposed company website, separate from the operating software demonstrated by Arqentia.
 
-## Brand and tone
+- `/landing`: standalone, full-width website preview. This is the primary route for reviewing the brand experience.
+- `/dashboard/landing`: the same page inside the Response Desk, with a link to the standalone preview.
+- Other dashboard routes: demonstration of opportunity preparation and station operations. Simulated station readings, workflows and site scenarios are not evidence of shipped SuryaTech product capabilities.
 
-- Palette: navy #14284B (the cabinet), gold #F2A900 (the emblem), paper off-white, ink #1f2a2e. The current site uses gold #FFA800 and Poppins headings, tagline "Innovate, Charge, Inspire".
-- Voice: plain, exact, industrial. Sentences a facilities director would say. No hype words, no "revolutionizing".
-- Brand-voice words: sun-lit, exact, built.
+The preview does not replace `suryatechpower.com`. Preview metadata requests no indexing. Public demo hosting and sharing the preview with the prospect are separate actions.
 
-## Anti-references
+## Audience and primary task
 
-- The current suryatechpower.com: grey illustrated hero, tiny title, AI art blocks, black stats band.
-- Generic SaaS landing kits: icon-title-text card grids, gradient text, glass cards, hero metric templates.
-- Editorial-magazine aesthetics: display serif italics, mono labels, broadsheet rules.
+Commercial property owners, Massachusetts public buyers, fleet operators and destination managers need to understand the system, determine whether their site warrants assessment, and contact the company. Mayur Kamalakar and Rafa review the proposed site before any prospect-facing use.
 
-## Design references (2026-09-18)
+The primary action is **Request a site assessment**. The page asks for name, email and site location, with site type and optional project details. Submitting the form prepares a `mailto:` draft in the visitor's email application. The visitor sends it there; the page sends no message automatically and has no lead-storage backend. Direct email and telephone links remain available.
 
-- terrasmart.com: white sections, bold all-caps headlines, video block, image rows, dark stats band.
-- arraytechinc.com: navy and gold, condensed bold type, photo hero with a two-line "WE ARE" headline, product tiles with big names, full-bleed image-and-text splits, navy bands.
-- nextpower.com: full-bleed photo hero, "Design / Deploy / Operate" stacked photo rows, product icon grid, dark statement bands, news grid.
-- LifeLabs (Dribbble 25384446): rounded hero frame, pill buttons, photo collage, benefits band, about card with stats.
+## Identity and voice
 
-## Strategic principles
+- Keep the actual SuryaTech logo, the established navy `#14284B` and gold `#F2A900`, and the tagline “Innovate. Charge. Inspire.”
+- Poppins headings reconnect the page with the company's existing visual identity; Public Sans supports readable body copy.
+- Write precise, approachable industrial language. Explain the site, energy source, storage and charging as one project without manufacturing certainty from missing specifications.
+- Use a clear product proposition, relevant site imagery, short section introductions and meaningful proof. Do not turn the site into a software-dashboard sales page.
 
-- Every claim traces to the public record or is labelled as a render, a sample or a simulation.
-- Imagery is the unit in real Massachusetts contexts, generated with Higgsfield from the product cutout so it stays consistent.
-- One primary action per screen: request a site assessment.
-- Nothing promises telemetry, COMMBUYS integration, MassCEC or SDP compliance, or National Grid timelines.
+## Information hierarchy
+
+1. Split hero: direct proposition, site image and assessment action.
+2. Compact links to the VEH122 guide and MassCEC award announcement.
+3. System explorer: solar generation, battery storage and EV charging, with a labelled concept rendering and optional 3D demonstration.
+4. Applications: commercial properties, parks/destinations, municipalities/fleets.
+5. Project approach: understand the site, define the system, plan the next steps.
+6. Company evidence with primary-source links.
+7. Questions about configuration, charging demand, installation, procurement and service.
+8. Assessment contact form and direct contact details.
+
+## Evidence and claim boundaries
+
+- [MassCEC's July 30, 2024 announcement](https://www.masscec.com/press/masscec-awards-4-million-climatetech-companies) identifies a $91,000 award to test SuryaTech's hybrid solar EV charger and battery. Describe testing support; do not imply certified performance or a completed rollout.
+- [The VEH122 contract guide](https://www.statewidecontractuserguide.mass.gov/CUG/Guide/VEH122) lists SuryaTech in categories 1 and 4. Buyers must confirm current scope and their purchasing requirements. Listing is not an endorsement or permission to bypass procurement.
+- [The company brochure](https://ne-expo.com/_data/brochures/suryatech.pdf) is a company-overview source.
+- The published contact is Mayur Kamalakar, founder and principal engineer: `mayur.kamalakar@suryatechpower.com`, `+1 (339) 244-9464`.
+- Site images are illustrative concepts; the product render and 3D model are concepts. They are not photographs of completed installations, certified equipment drawings or promised configurations.
+- Equipment, capacity, charging rates, grid requirements, civil work, approvals, installation schedule and service arrangements are defined for each project.
+
+Do not invent installation deadlines, trench-free guarantees, cloudy-week autonomy, performance figures, patent ownership, headcounts, collaboration counts, completed sites, customer testimonials, manufacturing origin, guaranteed compliance, telemetry or utility commitments. Never imply an integration with COMMBUYS or write to external state systems. Existing case permission boundaries still apply: no prospect outreach, pricing commitments or sharing with Mayur without Rafa's authorization.
+
+## Design references and scope
+
+Use the industrial clarity of Nextpower, Terrasmart and Array Technologies: substantial imagery, confident hierarchy, varied section composition and clear next steps. Keep SuryaTech's own brand and original copy. Do not copy reference-site assets, logos, testimonials or metrics.
+
+The current direction supersedes the LifeLabs rounded collage and Growmodo mono-label/drawing treatment. Preserve the dashboard theme and its shared UI components; landing-specific presentation belongs with the landing route.
