@@ -51,7 +51,8 @@ Use dark navy text on gold buttons. For the exact hexadecimal brand pair, contra
 - System: `/media/charging-station-poster.png`, labelled as a concept rendering. Link to the existing interactive 3D concept instead of loading a second WebGL scene into the landing.
 - Every illustrative site image has visible provenance and descriptive alternative text. Do not caption a concept as a completed customer installation.
 - Reserve image dimensions/aspect ratios, prioritize the hero, and lazy-load lower imagery. Image crops should keep equipment recognizable at each breakpoint.
-- The landing uses a static hero. Existing cinematic videos remain available in the project but do not drive the redesigned page.
+- The hero uses `/media/landing-hero-higgsfield-v4.mp4`, an eight-second Higgsfield film of the approved product scene with restrained camera motion and a blended loop boundary. Delivery is silent 1080p H.264, 24fps, approximately 2.56 MB, optimized for progressive playback.
+- A frame-matched `/media/landing-hero-higgsfield-v4-poster.webp` remains server-rendered beneath the video; the approved v3 still supplies social metadata. Load video only after visibility and motion/data preferences allow it, reveal it only after playback starts, and retain the still if playback fails.
 
 ## Interaction and accessibility
 
@@ -61,10 +62,10 @@ Use dark navy text on gold buttons. For the exact hexadecimal brand pair, contra
 - FAQs use native `details` and `summary` so disclosure behavior remains simple and keyboard accessible.
 - The assessment form has explicit labels, native validation and clear required-field instructions. Its action is “Prepare assessment email”; explain that nothing is sent automatically. Announce the prepared state and retain a retry link.
 - Prefer comfortable 44px or larger touch targets. Do not rely on hover alone or color alone for interactive meaning.
-- Reduced motion disables entrance/hover movement and transitions. Important content is server-rendered and visible without scroll-triggered JavaScript.
+- Reduced motion disables entrance/hover movement and transitions. The hero does not automatically fetch/play video when reduced motion or data saver is enabled; an explicit Play action permits it. A visible keyboard-accessible Pause/Play control is available after hydration. Pause offscreen or when the tab is hidden, and preserve the visitor's manual Pause choice when they return. Important content is server-rendered and visible without scroll-triggered JavaScript.
 
 ## Implementation boundaries
 
-`site-landing.tsx` remains the primarily server-rendered page composition. Navigation, system tabs and contact preparation are small client components. Keep landing CSS scoped. Reuse installed libraries and existing assets; avoid unnecessary dependencies and preserve `src/components/ui/`, calendar components, dashboard functionality and static-export compatibility.
+`site-landing.tsx` remains the primarily server-rendered page composition. Navigation, system tabs, hero playback and contact preparation are small client components. Keep landing CSS scoped. Reuse installed libraries and existing assets; avoid unnecessary dependencies and preserve `src/components/ui/`, calendar components, dashboard functionality and static-export compatibility.
 
 Preview metadata remains `noindex`. Form behavior does not introduce data storage or automatic outbound messages. Source, privacy and prospect-sharing boundaries in `PRODUCT.md` continue to apply.

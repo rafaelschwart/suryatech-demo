@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Poppins } from "next/font/google";
 import { ArrowDown, ArrowRight, ArrowUpRight, BatteryMedium, Mail, MapPin, Phone, Plus, Sun, Zap } from "lucide-react";
 
+import { HeroVideo } from "./hero-video";
 import { LandingContact } from "./landing-contact";
 import { LandingNavigation, SystemExplorer } from "./landing-interactions";
 import styles from "./site-landing.module.css";
@@ -79,13 +80,14 @@ export function SiteLanding({ embedded = false }: { embedded?: boolean }) {
           </div>
           <figure className={styles.heroVisual}>
             <Image
-              src="/media/landing-hero-higgsfield-v3.webp"
+              src="/media/landing-hero-higgsfield-v4-poster.webp"
               alt="Illustrative SuryaTech solar EV charger with integrated battery storage in a landscaped courtyard"
               fill
               preload
               sizes="(min-width: 800px) 60vw, 100vw"
               className={styles.heroImage}
             />
+            <HeroVideo />
             <figcaption>Illustrative concept</figcaption>
           </figure>
         </section>
