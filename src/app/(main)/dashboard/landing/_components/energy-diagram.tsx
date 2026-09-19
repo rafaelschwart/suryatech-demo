@@ -215,10 +215,10 @@ function ChargingArtwork() {
         <polygon
           className={styles.diagramFace}
           points={points([
-            [0, 0, 31],
-            [0, 62, 31],
-            [0, 62, 10],
-            [0, 0, 10],
+            [148, 0, 29],
+            [148, 62, 29],
+            [148, 62, 10],
+            [148, 0, 10],
           ])}
         />
         <polygon
