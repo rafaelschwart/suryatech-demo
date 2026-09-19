@@ -1,4 +1,5 @@
 import {
+  Barlow_Condensed,
   DM_Sans,
   Figtree,
   Geist,
@@ -102,12 +103,22 @@ const lora = Lora({
   variable: "--font-lora",
 });
 
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-barlow-condensed",
+});
+
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair-display",
 });
 
 export const fontRegistry = {
+  barlowCondensed: {
+    label: "Barlow Condensed",
+    font: barlowCondensed,
+  },
   geist: {
     label: "Geist",
     font: geist,

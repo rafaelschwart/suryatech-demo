@@ -194,8 +194,18 @@ export function useScrollReveal() {
       { rootMargin: "0px 0px -8% 0px" },
     );
     for (const el of els) io.observe(el);
+    // Safety: nothing stays hidden if the observer never fires (print, odd viewports, screenshots).
+    const safety = window.setTimeout(() => {
+      for (const el of els) {
+        if (el.style.opacity === "0") {
+          io.unobserve(el);
+          animate(el, { opacity: [0, 1], duration: 500, ease: "outCubic" });
+        }
+      }
+    }, 2500);
     return () => {
       io.disconnect();
+      window.clearTimeout(safety);
       for (const el of els) el.style.removeProperty("opacity");
     };
   }, []);

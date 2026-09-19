@@ -30,15 +30,13 @@ Two halves, each laid out as a process flow. Every screen shows the flow under i
 | Documents | `/dashboard/documents` | Nine sample PDFs, one or more per stage |
 | Deadline board | `/dashboard/deadlines` | Every date Suryatech owes, on one board |
 
-**Landing** (`/dashboard/landing`): a draft of a new suryatechpower.com. Structure after the LifeLabs solar landing on Dribbble (shot 25384446, scraped with Firecrawl and Apify into the case folder): photo-led hero inside a thin rounded frame, light Outfit headline, pill buttons, three-photo collage, navy benefits band with white icon chips, About card with big stats, sites grid with a side list, a day-in-the-life video row, FAQ, team, footer. Palette, copy and facts are SuryaTech's (current site scraped with Firecrawl). Full-bleed inside the dashboard; nothing is published.
+**Landing** (`/dashboard/landing`): a draft of a new suryatechpower.com, redesigned on 2026-09-18 after three solar-industry sites read with Firecrawl (terrasmart.com, arraytechinc.com, nextpower.com; captures in the case folder under `research/raw/2026-09-18-*`). Register: brand. Committed navy with a single gold accent on paper; Barlow Condensed for display, Public Sans for body (the civic typeface of the buyers). Structure: full-bleed cinematic video hero with a two-line uppercase headline, three stacked photo rows (Site, Install, Operate), product tiles with one big word each on navy, a split row with the energy-flow loop, sites for Massachusetts lots, a navy numbers band, questions and team, navy footer. `PRODUCT.md` and `DESIGN.md` hold the brief and tokens (impeccable). Nothing is published.
 
-Hero video: Seedance 2.5 image-to-video from the hero still (job `71c3b0b9-7f9e-4c07-87ee-8573e33dd343`, 10 s, 1080p, no audio, about 90 credits), `public/media/landing-hero.mp4`, played behind the hero with the still as poster.
+Hero video: Seedance 2.5 in omni_reference mode with the charger cutout as the product reference (job `154733ff-a9fe-47e7-82d8-42b186db4840`, 21:9, 10 s, 1080p, no audio, about 90 credits): a slow drone descent at blue hour over a foggy municipal lot with a row of units and two cars charging. `public/media/hero-cinematic.mp4` with `hero-cinematic-poster.jpg`. The earlier golden-hour clip (`landing-hero.mp4`) stays as the fallback and the Site row still.
 
-Motion (anime.js 4, `_components/motion.tsx`): one staggered entrance of the page blocks on every route change, counted numbers on KPI tiles, word-by-word headline and scroll reveals on the landing. All of it respects `prefers-reduced-motion`. The 21st.dev catalog was searched for counter and reveal patterns; the components are native, no paid code.
+Motion (anime.js 4, `_components/motion.tsx`): one staggered entrance of the page blocks on every route change, counted numbers on KPI tiles, a hero sequence on the landing and scroll reveals with a safety timer. All of it respects `prefers-reduced-motion`.
 
 3D model: the gold bolt primitive of the concept model is hidden and the SuryaTech wordmark (`public/media/suryatech-logo-light.png`, a light-on-dark cut of the logo from suryatechpower.com) is placed on the cabinet's front panel at runtime (`station-model.ts`).
-
-Landing tokens follow the Framer set you shared, in SuryaTech's palette: paper `#f6f5f1`, sand `#f1ebe3`, ink `#1f2a2e`, hairline borders at 10% black, navy and gold as the only accents.
 
 Photo-real imagery generated with Higgsfield `gpt_image_2_5` (quality high, 2k, the charger cutout as image reference, 3 credits each):
 
@@ -48,7 +46,6 @@ Photo-real imagery generated with Higgsfield `gpt_image_2_5` (quality high, 2k, 
 | `public/media/landing-canopy.webp` | `8ea6c68a-e917-4d67-b4f3-84e807ab088e` |
 | `public/media/landing-hero.webp` | `3077e9ac-b333-41a2-8368-b844cc8aae2a` |
 | `public/media/landing-park.webp` | `379fb615-808d-4b4e-bc6f-624562808e1d` |
-
 
 Shared pieces: `src/data/flows.ts` (the two flows), `_components/process-flow.tsx` (animated stepper), `_components/kanban.tsx` (native drag and drop, localStorage), `src/data/boards.ts` (board cards). Only the Lowell station is public record; the other six are illustrative placements on real public lots. Map tiles are Esri light-gray canvas, no key required.
 
