@@ -1,39 +1,35 @@
-# Design system, landing surface
+# Design system, landing surface (revised 2026-09-18 after growmodo.com)
 
-## Color strategy: Committed
+## Color strategy: Restrained on paper, committed ink bands
 
-Navy carries the hero and two bands (30 to 40 percent of the surface). Gold is the single accent: primary buttons, one rule, the emblem. Paper between the bands.
+Paper surfaces carry the page; navy ink carries the problem band and the footer; gold is the only signal (drawings, active steps, one label). No pure black or white as surfaces.
 
-- navy: oklch(0.28 0.07 261) (#14284B)
-- ink (deep navy): oklch(0.20 0.05 262) (#0E1A33)
-- gold: oklch(0.79 0.16 78) (#F2A900)
-- paper: oklch(0.97 0.004 80) (#f6f5f1)
-- sand: oklch(0.94 0.012 80) (#f1ebe3)
-- text: oklch(0.27 0.02 250) (#1f2a2e)
-- muted text: oklch(0.50 0.01 250) (#5b5b5b)
-- hairline: rgb(0 0 0 / 0.10)
-
-No pure black or white as surfaces.
+- paper: #f5f3ec · paper-soft: #faf8f2 · paper-2: #edeae0 · paper-3: #e2dfd5
+- ink: #0e1a33 · ink-2: #16213b · ink-mute: #4b5468 · ink-fade: #8a8f9c
+- signal: #F2A900 · signal-deep: #c98c00 · beacon: #14284B
+- rule: rgb(14 26 51 / 0.10) · rule-strong: rgb(14 26 51 / 0.22)
 
 ## Typography
 
-- Display: Barlow Condensed 600/700, uppercase for the hero and band headlines, tight tracking. Industrial signage voice, in the family Array Technologies uses without copying it.
-- Body: Public Sans 400/500. The typeface of Massachusetts and federal civic sites, which is who reads this.
-- Scale: hero clamp(3rem, 8vw, 7.5rem); section headline clamp(2.25rem, 4.5vw, 4rem); body 1.0625rem; captions 0.8125rem. Ratio at least 1.25 between steps.
-- Body line length 65 to 75 characters.
+- Display and body: Geist. Display weight 500, tracking -0.02em. Body 400, 1rem / 1.55.
+- Labels: JetBrains Mono, 0.6875rem, tracking 0.06em, uppercase. Used for eyebrows, captions, figure notes, drawing labels, roles.
+- Scale: display-xxl clamp(2.75rem, 7vw, 6.75rem) / 0.98; display-xl clamp(2.25rem, 4.5vw, 3.75rem) / 1.08; h2 2rem / 1.12; lead 1.375rem / 1.32; small 0.875rem / 1.5.
 
 ## Layout
 
-- Full-bleed sections, no page container for photo rows. Text columns cap at 60ch.
-- Asymmetric: hero copy bottom-left; product tiles offset; split rows alternate image side.
-- Spacing scale: 8, 16, 24, 40, 64, 96, 128. Section padding clamp(4rem, 8vw, 8rem).
-- Cards only for the product tiles (photo tiles with one word). No icon-title-text grids, no nested cards.
+- Container 1320px, padding 64px at desktop, 20px at phone.
+- Section padding 80 to 128px. Every section starts on a hairline rule. Eyebrow with a 10px square mark above each headline.
+- Radius 4px on controls, 6 to 8px on panels. Corner crosshairs on drawing panels.
+- Sequences are numbered 01 to 04 with a signal rule over the completed steps.
+
+## Drawings
+
+- Technical drawings, not renders: isometric line work, white faces, hairline ink strokes, mono labels on the objects, dotted sheet, FIG. and SHEET captions. One signal color for flows and leaders. Reduced motion stops the dashed flow.
 
 ## Motion
 
-- One page-load sequence on the hero (headline lines, then buttons). Sections reveal once on scroll. Ease-out quart. Reduced motion respected.
-- No animation of layout properties.
+- One hero sequence on load, sections reveal once on scroll with a safety timer. Ease-out quart. No layout properties animated.
 
 ## Bans
 
-Side-stripe borders, gradient text, glass cards, hero metric templates, identical card grids, modals, em dashes.
+Side-stripe borders, gradient text, glass cards, hero metric templates, identical icon-card grids, modals, em dashes, renders where a drawing is meant.
